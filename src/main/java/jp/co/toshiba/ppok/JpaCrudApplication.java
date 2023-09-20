@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
+import jp.co.toshiba.ppok.utils.Messages;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -18,6 +19,6 @@ import lombok.extern.log4j.Log4j2;
 public class JpaCrudApplication {
 	public static void main(final String[] args) {
 		SpringApplication.run(JpaCrudApplication.class, args);
-		log.info("本アプリは正常的に起動されました。");
+		log.info(Messages.MSG003);
 	}
 }

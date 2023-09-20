@@ -8,7 +8,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import jp.co.sony.ppog.utils.Messages;
+import jp.co.toshiba.ppok.utils.Messages;
 import lombok.extern.log4j.Log4j2;
 
 /**
