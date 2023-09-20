@@ -29,7 +29,7 @@ import lombok.Setter;
 @IdClass(LanguageId.class)
 public class Language implements Serializable {
 
-	private static final long serialVersionUID = -8085659909634431823L;
+	private static final long serialVersionUID = -2909406519851156194L;
 
 	/**
 	 * This field corresponds to the database column COUNTRY_CODE

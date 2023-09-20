@@ -29,7 +29,7 @@ import lombok.Setter;
 @NamedQuery(name = "City.saiban", query = "select count(c.id) + 1 from City c")
 public class City implements Serializable {
 
-	private static final long serialVersionUID = 1815689293387304425L;
+	private static final long serialVersionUID = 8251871899988328317L;
 
 	/**
 	 * This field corresponds to the database column ID

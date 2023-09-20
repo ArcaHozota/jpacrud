@@ -30,7 +30,7 @@ import lombok.Setter;
 @NamedQuery(name = "Country.findNationsByCnt", query = "select distinct n.name from Country as n where n.logicDeleteFlg = 'visible' and n.continent =:continent order by n.name asc")
 public class Country implements Serializable {
 
-	private static final long serialVersionUID = 6762395398373991166L;
+	private static final long serialVersionUID = 8200490748915737257L;
 
 	/**
 	 * This field corresponds to the database column CODE

@@ -26,7 +26,7 @@ import lombok.Setter;
 @Proxy(lazy = false)
 public class CityView implements Serializable {
 
-	private static final long serialVersionUID = 6678964783710878220L;
+	private static final long serialVersionUID = -5318717623213325302L;
 
 	/**
 	 * This field corresponds to the database column ID
