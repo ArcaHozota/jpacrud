@@ -27,6 +27,7 @@ import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.repository.CountryRepository;
 import jp.co.toshiba.ppok.repository.LanguageRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
+import jp.co.toshiba.ppok.utils.StringUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -71,7 +72,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public CityInfoDto getCityInfoById(final Long id) {
-		final CityView cityView = this.cityViewRepository.getById(id);
+		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 		final CityInfoDto cityInfoDto = new CityInfoDto();
 		BeanUtils.copyProperties(cityView, cityInfoDto);
 		final String language = this.findLanguageByCty(cityInfoDto.getNation());
@@ -156,7 +157,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	@Override
 	public List<String> getListOfNationsById(final Long id) {
 		final List<String> list = new ArrayList<>();
-		final CityView cityView = this.cityViewRepository.getById(id);
+		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 		final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
 		final String nationName = cityView.getNation();
 		list.add(nationName);
