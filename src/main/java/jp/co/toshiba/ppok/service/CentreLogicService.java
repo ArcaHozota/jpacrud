@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import jp.co.toshiba.ppok.dto.CityInfoDto;
 import jp.co.toshiba.ppok.entity.City;
 
 /**
