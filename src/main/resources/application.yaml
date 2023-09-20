@@ -1,13 +1,13 @@
 server:
-  port: 8082
+  port: 8687
 spring:
   application:
     name: jpassmcrud
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://52.199.163.241:5432/world
-    username: postgres
-    password: postgres
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+    username: ORACLECT
+    password: ORACLECT
     hikari:
       maximum-pool-size: 30
       max-lifetime: 1500000
@@ -16,7 +16,7 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    database: POSTGRESQL
+    database: ORACLE
     show-sql: true
     open-in-view: false
   output:
