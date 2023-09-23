@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import jp.co.toshiba.ppok.dto.CityInfoDto;
+import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
 
 /**
@@ -21,7 +21,7 @@ public interface CentreLogicService {
 	 * @param keyword 検索キーワード
 	 * @return Page<CityInfoDto>
 	 */
-	Page<CityInfoDto> getPageInfo(Integer pageNum, String keyword);
+	Page<CityDto> getPageInfo(Integer pageNum, String keyword);
 
 	/**
 	 * 都市IDによって情報を抽出する
@@ -29,7 +29,7 @@ public interface CentreLogicService {
 	 * @param id 都市ID
 	 * @return CityInfoDto
 	 */
-	CityInfoDto getCityInfoById(Long id);
+	CityDto getCityInfoById(Long id);
 
 	/**
 	 * 都市IDによって国家名を抽出する
@@ -44,14 +44,14 @@ public interface CentreLogicService {
 	 *
 	 * @param cityInfoDto 都市情報
 	 */
-	void save(CityInfoDto cityInfoDto);
+	void save(CityDto cityInfoDto);
 
 	/**
 	 * 入力した都市情報を更新する
 	 *
 	 * @param cityInfoDto 都市情報
 	 */
-	void update(CityInfoDto cityInfoDto);
+	void update(CityDto cityInfoDto);
 
 	/**
 	 * 都市IDによって情報を削除する
