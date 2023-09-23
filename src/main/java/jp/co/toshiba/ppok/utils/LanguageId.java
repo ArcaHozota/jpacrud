@@ -1,4 +1,4 @@
-package jp.co.toshiba.ppok.entity;
+package jp.co.toshiba.ppok.utils;
 
 import java.io.Serializable;
 
