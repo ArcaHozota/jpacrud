@@ -22,9 +22,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Center Terminal Controller handle the retrieve and update requests.
+ * 中央処理コントローラ
  *
- * @author Administrator
+ * @author Arcahozota
+ * @since 1.11
  */
 @RestController
 @RequestMapping("/public/grssmcrud")
@@ -32,12 +33,12 @@ import lombok.RequiredArgsConstructor;
 public class CentreController {
 
 	/**
-	 * pageSize
+	 * ページングサイズ
 	 */
 	private static final Integer PAGE_SIZE = 17;
 
 	/**
-	 * Central service interface
+	 * 中央処理サービスインターフェス
 	 */
 	private final CentreLogicService centreLogicService;
 
