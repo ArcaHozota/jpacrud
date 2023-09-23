@@ -109,7 +109,7 @@ public class CentreController {
 		if (!cityName.matches(Messages.MSG006)) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG005);
 		}
-		final List<City> duplicatedNames = this.centreLogicService.checkDuplicatedName(cityName);
+		final List<City> duplicatedNames = this.centreLogicService.checkDuplicatedNames(cityName);
 		if (!duplicatedNames.isEmpty()) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG004);
 		}
@@ -144,8 +144,8 @@ public class CentreController {
 	 * @return RestMsg.success().add(data)
 	 */
 	@GetMapping(value = "/countries/{id}")
-	public RestMsg getListOfNationsById(@PathVariable("id") final Integer id) {
-		final List<String> nationList = this.centreLogicService.getListOfNationsById(id);
+	public RestMsg getListOfNationsById(@PathVariable("id") final Long id) {
+		final List<String> nationList = this.centreLogicService.findNationsByCityId(id);
 		return RestMsg.success().add("nationsByName", nationList);
 	}
 

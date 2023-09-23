@@ -88,5 +88,5 @@ public interface CentreLogicService {
 	 * @param cityName 都市名
 	 * @return List<City>
 	 */
-	List<City> checkDuplicatedName(String cityName);
+	List<City> checkDuplicatedNames(String cityName);
 }

@@ -154,7 +154,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public List<String> getListOfNationsById(final Long id) {
+	public List<String> findNationsByCityId(final Long id) {
 		final List<String> list = new ArrayList<>();
 		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 		final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
@@ -238,7 +238,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public List<City> checkDuplicatedName(final String cityName) {
+	public List<City> checkDuplicatedNames(final String cityName) {
 		final City city = new City();
 		city.setName(StringUtils.toHankaku(cityName));
 		final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name", GenericPropertyMatchers.exact());
