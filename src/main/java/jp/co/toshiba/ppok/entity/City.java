@@ -65,5 +65,5 @@ public class City implements Serializable {
 	 * This field corresponds to the database column LOGIC_DELETE_FLG
 	 */
 	@Column(nullable = false)
-	private String logicDeleteFlg;
+	private String deleteFlg;
 }
