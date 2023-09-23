@@ -42,16 +42,16 @@ public interface CentreLogicService {
 	/**
 	 * 入力した都市情報を保存する
 	 *
-	 * @param cityInfoDto 都市情報
+	 * @param cityDto 都市情報
 	 */
-	void save(CityDto cityInfoDto);
+	void saveById(CityDto cityDto);
 
 	/**
 	 * 入力した都市情報を更新する
 	 *
-	 * @param cityInfoDto 都市情報
+	 * @param cityDto 都市情報
 	 */
-	void update(CityDto cityInfoDto);
+	void updateById(CityDto cityDto);
 
 	/**
 	 * 都市IDによって情報を削除する
