@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jp.co.toshiba.ppok.dto.CityDto;
-import jp.co.toshiba.ppok.service.CentreService;
+import jp.co.toshiba.ppok.service.CentreLogicService;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
 import jp.co.toshiba.ppok.utils.RestMsg;
@@ -39,7 +39,7 @@ public class CentreController {
 	/**
 	 * Central service interface
 	 */
-	private final CentreService centreService;
+	private final CentreLogicService centreLogicService;
 
 	/**
 	 * Retrieve the city data.
@@ -49,7 +49,7 @@ public class CentreController {
 	@GetMapping(value = "/city")
 	public RestMsg getCities(@RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum,
 			@RequestParam(value = "keyword", defaultValue = StringUtils.EMPTY_STRING) final String keyword) {
-		final Pagination<CityDto> cityInfos = this.centreService.findByKeywords(pageNum, PAGE_SIZE, keyword);
+		final Pagination<CityDto> cityInfos = this.centreLogicService.findByKeywords(pageNum, PAGE_SIZE, keyword);
 		return RestMsg.success().add("pageInfo", cityInfos);
 	}
 
@@ -61,7 +61,7 @@ public class CentreController {
 	 */
 	@GetMapping(value = "/city/{id}")
 	public RestMsg getCityInfo(@PathVariable("id") final Integer id) {
-		final CityDto cityInfo = this.centreService.getCityInfo(id);
+		final CityDto cityInfo = this.centreLogicService.getCityInfo(id);
 		return RestMsg.success().add("citySelected", cityInfo);
 	}
 
@@ -73,7 +73,7 @@ public class CentreController {
 	 */
 	@PostMapping(value = "/city")
 	public RestMsg saveCityInfo(@RequestBody final CityDto cityDto) {
-		this.centreService.save(cityDto);
+		this.centreLogicService.save(cityDto);
 		return RestMsg.success();
 	}
 
@@ -85,7 +85,7 @@ public class CentreController {
 	 */
 	@PutMapping(value = "/city/{id}")
 	public RestMsg updateCityDto(@RequestBody final CityDto cityDto) {
-		this.centreService.update(cityDto);
+		this.centreLogicService.update(cityDto);
 		return RestMsg.success();
 	}
 
@@ -97,7 +97,7 @@ public class CentreController {
 	 */
 	@DeleteMapping(value = "/city/{id}")
 	public RestMsg deleteCityDto(@PathVariable("id") final Integer id) {
-		this.centreService.removeById(id);
+		this.centreLogicService.removeById(id);
 		return RestMsg.success();
 	}
 
@@ -112,7 +112,7 @@ public class CentreController {
 		if (!cityName.matches(Messages.MSG006)) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG005);
 		}
-		final Boolean duplicated = this.centreService.checkDuplicated(cityName);
+		final Boolean duplicated = this.centreLogicService.checkDuplicated(cityName);
 		if (Boolean.TRUE.equals(duplicated)) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG004);
 		}
@@ -126,7 +126,7 @@ public class CentreController {
 	 */
 	@GetMapping(value = "/continents")
 	public RestMsg getListOfContinents() {
-		final List<String> cnList = this.centreService.findAllContinents();
+		final List<String> cnList = this.centreLogicService.findAllContinents();
 		return RestMsg.success().add("continents", cnList);
 	}
 
@@ -137,7 +137,7 @@ public class CentreController {
 	 */
 	@GetMapping(value = "/countries")
 	public RestMsg getListOfNations(@RequestParam("continentVal") final String continent) {
-		final List<String> nationList = this.centreService.findNationsByCnt(continent);
+		final List<String> nationList = this.centreLogicService.findNationsByCnt(continent);
 		return RestMsg.success().add("nations", nationList);
 	}
 
@@ -148,7 +148,7 @@ public class CentreController {
 	 */
 	@GetMapping(value = "/countries/{id}")
 	public RestMsg getListOfNationsById(@PathVariable("id") final Integer id) {
-		final List<String> nationList = this.centreService.findNationsByCityId(id);
+		final List<String> nationList = this.centreLogicService.findNationsByCityId(id);
 		return RestMsg.success().add("nationsByName", nationList);
 	}
 
@@ -159,7 +159,7 @@ public class CentreController {
 	 */
 	@GetMapping(value = "/language")
 	public RestMsg getLanguages(@RequestParam("nationVal") final String nation) {
-		final String language = this.centreService.findLanguageByCty(nation);
+		final String language = this.centreLogicService.findLanguageByCty(nation);
 		return RestMsg.success().add("languages", language);
 	}
 }
