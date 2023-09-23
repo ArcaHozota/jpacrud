@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import jp.co.toshiba.ppok.entity.Language;
-import jp.co.toshiba.ppok.entity.LanguageId;
+import jp.co.toshiba.ppok.utils.LanguageId;
 
 /**
  * 言語リポジトリ

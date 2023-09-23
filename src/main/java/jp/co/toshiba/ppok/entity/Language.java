@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Proxy;
 
+import jp.co.toshiba.ppok.utils.LanguageId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
