@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jp.co.toshiba.ppok.dto.CityDto;
+import jp.co.toshiba.ppok.entity.City;
 import jp.co.toshiba.ppok.service.CentreLogicService;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
@@ -56,8 +57,8 @@ public class CentreController {
 	 * @return RestMsg.success().add(data)
 	 */
 	@GetMapping(value = "/city/{id}")
-	public RestMsg getCityInfo(@PathVariable("id") final Integer id) {
-		final CityDto cityInfo = this.centreLogicService.getCityInfo(id);
+	public RestMsg getCityInfo(@PathVariable("id") final Long id) {
+		final CityDto cityInfo = this.centreLogicService.getCityInfoById(id);
 		return RestMsg.success().add("citySelected", cityInfo);
 	}
 
@@ -69,7 +70,7 @@ public class CentreController {
 	 */
 	@PostMapping(value = "/city")
 	public RestMsg saveCityInfo(@RequestBody final CityDto cityDto) {
-		this.centreLogicService.save(cityDto);
+		this.centreLogicService.saveById(cityDto);
 		return RestMsg.success();
 	}
 
@@ -81,7 +82,7 @@ public class CentreController {
 	 */
 	@PutMapping(value = "/city/{id}")
 	public RestMsg updateCityDto(@RequestBody final CityDto cityDto) {
-		this.centreLogicService.update(cityDto);
+		this.centreLogicService.updateById(cityDto);
 		return RestMsg.success();
 	}
 
@@ -92,7 +93,7 @@ public class CentreController {
 	 * @return RestMsg.success()
 	 */
 	@DeleteMapping(value = "/city/{id}")
-	public RestMsg deleteCityDto(@PathVariable("id") final Integer id) {
+	public RestMsg deleteCityDto(@PathVariable("id") final Long id) {
 		this.centreLogicService.removeById(id);
 		return RestMsg.success();
 	}
@@ -108,8 +109,8 @@ public class CentreController {
 		if (!cityName.matches(Messages.MSG006)) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG005);
 		}
-		final Boolean duplicated = this.centreLogicService.checkDuplicated(cityName);
-		if (Boolean.TRUE.equals(duplicated)) {
+		final List<City> duplicatedNames = this.centreLogicService.checkDuplicatedName(cityName);
+		if (!duplicatedNames.isEmpty()) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG004);
 		}
 		return RestMsg.success();
@@ -144,7 +145,7 @@ public class CentreController {
 	 */
 	@GetMapping(value = "/countries/{id}")
 	public RestMsg getListOfNationsById(@PathVariable("id") final Integer id) {
-		final List<String> nationList = this.centreLogicService.findNationsByCityId(id);
+		final List<String> nationList = this.centreLogicService.getListOfNationsById(id);
 		return RestMsg.success().add("nationsByName", nationList);
 	}
 

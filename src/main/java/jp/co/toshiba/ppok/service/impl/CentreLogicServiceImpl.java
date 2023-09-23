@@ -167,7 +167,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void update(final CityDto cityInfoDto) {
+	public void updateById(final CityDto cityInfoDto) {
 		final City city = new City();
 		BeanUtils.copyProperties(cityInfoDto, city, "continent", "nation", "language");
 		final String nationName = cityInfoDto.getNation();
@@ -177,14 +177,14 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void save(final CityDto cityInfoDto) {
+	public void saveById(final CityDto cityInfoDto) {
 		final City city = new City();
 		BeanUtils.copyProperties(cityInfoDto, city, "continent", "nation", "language");
 		final Long saiban = this.cityRepository.saiban();
 		final String nationCode = this.countryRepository.findNationCode(cityInfoDto.getNation());
 		city.setId(saiban);
 		city.setCountryCode(nationCode);
-		city.setLogicDeleteFlg("visible");
+		city.setDeleteFlg("visible");
 		this.cityRepository.save(city);
 	}
 
@@ -238,7 +238,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public List<City> checkDuplicate(final String cityName) {
+	public List<City> checkDuplicatedName(final String cityName) {
 		final City city = new City();
 		city.setName(StringUtils.toHankaku(cityName));
 		final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name", GenericPropertyMatchers.exact());

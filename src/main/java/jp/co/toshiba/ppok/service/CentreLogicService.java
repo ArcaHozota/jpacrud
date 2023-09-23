@@ -31,14 +31,6 @@ public interface CentreLogicService {
 	CityDto getCityInfoById(Long id);
 
 	/**
-	 * 都市IDによって国家名を抽出する
-	 *
-	 * @param id 都市ID
-	 * @return List<String>
-	 */
-	List<String> getListOfNationsById(Long id);
-
-	/**
 	 * 入力した都市情報を保存する
 	 *
 	 * @param cityDto 都市情報
@@ -75,6 +67,14 @@ public interface CentreLogicService {
 	List<String> findNationsByCnt(String continentVal);
 
 	/**
+	 * 都市IDによって国家名を抽出する
+	 *
+	 * @param id 都市ID
+	 * @return List<String>
+	 */
+	List<String> findNationsByCityId(Long id);
+
+	/**
 	 * 指定された国の公用語を取得する
 	 *
 	 * @param nationVal 国名
@@ -88,5 +88,5 @@ public interface CentreLogicService {
 	 * @param cityName 都市名
 	 * @return List<City>
 	 */
-	List<City> checkDuplicate(String cityName);
+	List<City> checkDuplicatedName(String cityName);
 }
