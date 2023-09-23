@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CityInfoDto extends CityView {
+public class CityDto extends CityView {
 
 	private static final long serialVersionUID = 4831225402305424520L;
 
