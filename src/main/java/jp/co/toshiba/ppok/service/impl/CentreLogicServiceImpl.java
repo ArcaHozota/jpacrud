@@ -27,6 +27,7 @@ import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.repository.CountryRepository;
 import jp.co.toshiba.ppok.repository.LanguageRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
+import jp.co.toshiba.ppok.utils.Pagination;
 import jp.co.toshiba.ppok.utils.StringUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +82,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public Page<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
+	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
 		// ページングコンストラクタを宣言する；
 		final PageRequest pageRequest = PageRequest.of(pageNum - 1, PAGE_SIZE, Sort.by(Direction.ASC, "id"));
 		// キーワードの属性を判断する；
@@ -97,14 +98,13 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					sort = Integer.parseInt(keisan);
 				}
 				// 人口数量昇順で最初の15個都市の情報を吹き出します；
-				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream()
-						.map(item -> {
-							final CityDto cityInfoDto = new CityDto();
-							BeanUtils.copyProperties(item, cityInfoDto);
-							final String language = this.findLanguageByCty(item.getNation());
-							cityInfoDto.setLanguage(language);
-							return cityInfoDto;
-						}).collect(Collectors.toList());
+				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream().map(item -> {
+					final CityDto cityInfoDto = new CityDto();
+					BeanUtils.copyProperties(item, cityInfoDto);
+					final String language = this.findLanguageByCty(item.getNation());
+					cityInfoDto.setLanguage(language);
+					return cityInfoDto;
+				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
 					return new PageImpl<>(minimumRanks.subList(pageMin, sort), pageRequest, minimumRanks.size());
 				}
@@ -117,14 +117,13 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					sort = Integer.parseInt(keisan);
 				}
 				// 人口数量降順で最初の15個都市の情報を吹き出します；
-				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream()
-						.map(item -> {
-							final CityDto cityInfoDto = new CityDto();
-							BeanUtils.copyProperties(item, cityInfoDto);
-							final String language = this.findLanguageByCty(item.getNation());
-							cityInfoDto.setLanguage(language);
-							return cityInfoDto;
-						}).collect(Collectors.toList());
+				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream().map(item -> {
+					final CityDto cityInfoDto = new CityDto();
+					BeanUtils.copyProperties(item, cityInfoDto);
+					final String language = this.findLanguageByCty(item.getNation());
+					cityInfoDto.setLanguage(language);
+					return cityInfoDto;
+				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
 					return new PageImpl<>(maximumRanks.subList(pageMin, sort), pageRequest, maximumRanks.size());
 				}

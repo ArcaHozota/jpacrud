@@ -33,11 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class CentreController {
 
 	/**
-	 * ページングサイズ
-	 */
-	private static final Integer PAGE_SIZE = 17;
-
-	/**
 	 * 中央処理サービスインターフェス
 	 */
 	private final CentreLogicService centreLogicService;
@@ -50,7 +45,7 @@ public class CentreController {
 	@GetMapping(value = "/city")
 	public RestMsg getCities(@RequestParam(value = "pageNum", defaultValue = "1") final Integer pageNum,
 			@RequestParam(value = "keyword", defaultValue = StringUtils.EMPTY_STRING) final String keyword) {
-		final Pagination<CityDto> cityInfos = this.centreLogicService.findByKeywords(pageNum, PAGE_SIZE, keyword);
+		final Pagination<CityDto> cityInfos = this.centreLogicService.getPageInfo(pageNum, keyword);
 		return RestMsg.success().add("pageInfo", cityInfos);
 	}
 

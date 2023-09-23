@@ -2,10 +2,9 @@ package jp.co.toshiba.ppok.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
+import jp.co.toshiba.ppok.utils.Pagination;
 
 /**
  * 中央処理サービスインターフェス
@@ -19,9 +18,9 @@ public interface CentreLogicService {
 	 *
 	 * @param pageNum ページングナンバー
 	 * @param keyword 検索キーワード
-	 * @return Page<CityInfoDto>
+	 * @return Pagination<CityDto>
 	 */
-	Page<CityDto> getPageInfo(Integer pageNum, String keyword);
+	Pagination<CityDto> getPageInfo(Integer pageNum, String keyword);
 
 	/**
 	 * 都市IDによって情報を抽出する
