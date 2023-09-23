@@ -8,10 +8,10 @@ import jp.co.toshiba.ppok.utils.Messages;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * JpaCrudアプリケーション
+ * JpaSsmcrudアプリケーション
  *
  * @author ArcaHozota
- * @since 1.00beta
+ * @since 1.01
  */
 @Log4j2
 @SpringBootApplication
