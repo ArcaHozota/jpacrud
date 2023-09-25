@@ -12,7 +12,6 @@ import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -106,9 +105,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
-					return new PageImpl<>(minimumRanks.subList(pageMin, sort), pageRequest, minimumRanks.size());
+					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum);
 				}
-				return new PageImpl<>(minimumRanks.subList(pageMin, pageMax), pageRequest, minimumRanks.size());
+				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum);
 			}
 			if (hankakuKeyword.startsWith("max(pop)")) {
 				final int indexOf = hankakuKeyword.indexOf(")");
@@ -244,16 +243,5 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name", GenericPropertyMatchers.exact());
 		final Example<City> example = Example.of(city, matcher);
 		return this.cityRepository.findAll(example);
-	}
-
-	private Page<CityDto> getCityInfoDtos(final Page<CityView> pages, final Pageable pageable, final Long total) {
-		final List<CityDto> cityInfoDtos = pages.getContent().stream().map(item -> {
-			final CityDto cityInfoDto = new CityDto();
-			BeanUtils.copyProperties(item, cityInfoDto);
-			final String language = this.findLanguageByCty(item.getNation());
-			cityInfoDto.setLanguage(language);
-			return cityInfoDto;
-		}).collect(Collectors.toList());
-		return new PageImpl<>(cityInfoDtos, pageable, total);
 	}
 }
