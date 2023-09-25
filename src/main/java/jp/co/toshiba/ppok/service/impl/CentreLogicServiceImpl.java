@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -20,6 +19,7 @@ import com.google.common.collect.Lists;
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
 import jp.co.toshiba.ppok.entity.CityView;
+import jp.co.toshiba.ppok.entity.Country;
 import jp.co.toshiba.ppok.entity.Language;
 import jp.co.toshiba.ppok.repository.CityRepository;
 import jp.co.toshiba.ppok.repository.CityViewRepository;
@@ -226,14 +226,14 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		final Specification<Language> specification1 = (root, query, criteriaBuilder) -> criteriaBuilder
-				.equal(root.get("country.getName()"), StringUtils.toHankaku(nationVal));
-		final Specification<Language> specification2 = (root, query, criteriaBuilder) -> {
-			query.orderBy(criteriaBuilder.desc(root.get("percentage")));
-			return criteriaBuilder.equal(root.get("deleteFlg"), Messages.MSG007);
-		};
-		final Specification<Language> languageSpecification = Specification.where(specification1).and(specification2);
-		final List<Language> languages = this.languageRepository.findAll(languageSpecification);
+		final Country country = new Country();
+		final Language language = new Language();
+		country.setName(nationVal);
+		language.setDeleteFlg(Messages.MSG007);
+		language.setCountry(country);
+		final Example<Language> example = Example.of(language, ExampleMatcher.matchingAll());
+		final List<Language> languages = this.languageRepository.findAll(example,
+				Sort.by(Direction.DESC, "percentage"));
 		if (languages.size() == 1) {
 			return languages.get(0).getName();
 		}
