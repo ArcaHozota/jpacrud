@@ -26,8 +26,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "WORLD_COUNTRY")
 @Proxy(lazy = false)
-@NamedQuery(name = "Country.findAllContinents", query = "select distinct n.continent from Country as n where n.logicDeleteFlg = 'visible' order by n.continent asc")
-@NamedQuery(name = "Country.findNationsByCnt", query = "select distinct n.name from Country as n where n.logicDeleteFlg = 'visible' and n.continent =:continent order by n.name asc")
+@NamedQuery(name = "Country.findAllContinents", query = "select distinct cty.continent from Country as cty where cty.deleteFlg = 'visible' order by cty.continent asc")
+@NamedQuery(name = "Country.findNationsByCnt", query = "select distinct cty.name from Country as cty where cty.deleteFlg = 'visible' and cty.continent =:continent order by cty.name asc")
 public final class Country implements Serializable {
 
 	private static final long serialVersionUID = 8200490748915737257L;

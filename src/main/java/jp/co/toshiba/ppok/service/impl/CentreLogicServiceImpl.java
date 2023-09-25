@@ -1,7 +1,6 @@
 package jp.co.toshiba.ppok.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
 
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
@@ -173,7 +174,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public List<String> findNationsByCityId(final Long id) {
-		final List<String> list = new ArrayList<>();
+		final List<String> list = Lists.newArrayList();
 		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 		final String nationName = cityView.getNation();
 		list.add(nationName);
@@ -185,21 +186,21 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void updateById(final CityDto cityInfoDto) {
+	public void updateById(final CityDto cityDto) {
 		final City city = new City();
-		BeanUtils.copyProperties(cityInfoDto, city, "continent", "nation", "language");
-		final String nationName = cityInfoDto.getNation();
+		BeanUtils.copyProperties(cityDto, city, "continent", "nation", "language");
+		final String nationName = cityDto.getNation();
 		final String nationCode = this.countryRepository.findNationCode(nationName);
 		city.setCountryCode(nationCode);
 		this.cityRepository.save(city);
 	}
 
 	@Override
-	public void saveById(final CityDto cityInfoDto) {
+	public void saveById(final CityDto cityDto) {
 		final City city = new City();
-		BeanUtils.copyProperties(cityInfoDto, city, "continent", "nation", "language");
+		BeanUtils.copyProperties(cityDto, city, "continent", "nation", "language");
 		final Long saiban = this.cityRepository.saiban();
-		final String nationCode = this.countryRepository.findNationCode(cityInfoDto.getNation());
+		final String nationCode = this.countryRepository.findNationCode(cityDto.getNation());
 		city.setId(saiban);
 		city.setCountryCode(nationCode);
 		city.setDeleteFlg("visible");
