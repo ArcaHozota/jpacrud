@@ -42,8 +42,9 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION "
-			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
+	@Query(value = "SELECT WCN.ID, WCTY.CONTINENT, WCTY.NAME AS NATION, WCN.NAME, WCN.DISTRICT, WCN.POPULATION "
+			+ "FROM WORLD_CITY WCN INNER JOIN WORLD_COUNTRY WCTY ON WCTY.CODE = WCN.COUNTRY_CODE"
+			+ "AND WCN.DELETE_FLG = 'visible' ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
 	List<City> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
