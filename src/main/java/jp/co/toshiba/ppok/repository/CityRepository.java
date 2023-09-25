@@ -43,7 +43,7 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population fetch first :sortnumber rows only")
+	@Query(value = "select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population fetch first :sortNumber rows only")
 	List<CityDto> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
@@ -51,7 +51,6 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION "
-			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION DESC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
+	@Query(value = "select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population desc fetch first :sortNumber rows only")
 	List<CityDto> findMaximumRanks(@Param("sortNumber") Integer sort);
 }
