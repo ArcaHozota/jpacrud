@@ -69,7 +69,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final City city = this.cityRepository.findById(id).orElseGet(City::new);
 		final CityDto cityDto = new CityDto();
 		BeanUtils.copyProperties(city, cityDto);
-		final String language = this.findLanguageByCty(cityDto.getNation());
+		final String language = this.getLanguage(city.getCountryCode());
+		cityDto.setContinent(city.getCountry().getContinent());
+		cityDto.setNation(city.getCountry().getName());
 		cityDto.setLanguage(language);
 		return cityDto;
 	}
