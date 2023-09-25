@@ -175,9 +175,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	public List<String> findNationsByCityId(final Long id) {
 		final List<String> list = new ArrayList<>();
 		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
-		final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
 		final String nationName = cityView.getNation();
 		list.add(nationName);
+		final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
 		final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName))
 				.collect(Collectors.toList());
 		list.addAll(collect);
