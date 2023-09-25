@@ -1,16 +1,12 @@
 package jp.co.toshiba.ppok.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
 import oracle.jdbc.driver.OracleSQLException;
 
@@ -37,20 +33,4 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	@Modifying
 	@Transactional(rollbackFor = OracleSQLException.class)
 	void removeById(@Param("id") Long id);
-
-	/**
-	 * 人口数量昇順で都市情報を検索する
-	 *
-	 * @return List<CityView>
-	 */
-	@Query(value = "select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population fetch first :sortNumber rows only")
-	List<CityDto> findMinimumRanks(@Param("sortNumber") Integer sort);
-
-	/**
-	 * 人口数量降順で都市情報を検索する
-	 *
-	 * @return List<CityView>
-	 */
-	@Query(value = "select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population desc fetch first :sortNumber rows only")
-	List<CityDto> findMaximumRanks(@Param("sortNumber") Integer sort);
 }
