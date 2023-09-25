@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
 import oracle.jdbc.driver.OracleSQLException;
 
@@ -42,10 +43,9 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "SELECT WCN.ID, WCTY.CONTINENT, WCTY.NAME AS NATION, WCN.NAME, WCN.DISTRICT, WCN.POPULATION "
-			+ "FROM WORLD_CITY WCN INNER JOIN WORLD_COUNTRY WCTY ON WCTY.CODE = WCN.COUNTRY_CODE"
-			+ "AND WCN.DELETE_FLG = 'visible' ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
-	List<City> findMinimumRanks(@Param("sortNumber") Integer sort);
+	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION "
+			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
+	List<CityDto> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
 	 * 人口数量降順で都市情報を検索する
@@ -54,5 +54,5 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 */
 	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION "
 			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION DESC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
-	List<City> findMaximumRanks(@Param("sortNumber") Integer sort);
+	List<CityDto> findMaximumRanks(@Param("sortNumber") Integer sort);
 }
