@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -94,7 +95,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				final List<CityDto> minimumRanks = this.cityRepository.findMinimumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.findLanguageByCty(item.getCountryCode());
+					final String language = this.getLanguage(item.getCountryCode());
+					cityDto.setContinent(item.getCountry().getContinent());
+					cityDto.setNation(item.getCountry().getName());
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
@@ -113,7 +116,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				final List<CityDto> maximumRanks = this.cityRepository.findMaximumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.findLanguageByCty(item.getNation());
+					final String language = this.getLanguage(item.getCountryCode());
+					cityDto.setContinent(item.getCountry().getContinent());
+					cityDto.setNation(item.getCountry().getName());
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
@@ -123,31 +128,37 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum);
 			}
 			// ページング検索；
-			final City City = new City();
-			City.setNation(hankakuKeyword);
-			final Example<City> example = Example.of(City, ExampleMatcher.matching());
-			final List<City> findByNations = this.cityRepository.findAll(example);
-			if (!findByNations.isEmpty()) {
+			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
+			final City city = new City();
+			if (StringUtils.isNotEmpty(nationCode)) {
+				city.setCountryCode(nationCode);
+				city.setDeleteFlg(Messages.MSG007);
+				final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
 				final Page<City> pages = this.cityRepository.findAll(example, pageRequest);
 				final List<CityDto> pagesByNation = pages.getContent().stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.findLanguageByCty(item.getNation());
+					final String language = this.getLanguage(item.getCountryCode());
+					cityDto.setContinent(item.getCountry().getContinent());
+					cityDto.setNation(item.getCountry().getName());
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
 				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum);
 			}
-			City.setNation(null);
-			City.setName(hankakuKeyword);
-			final ExampleMatcher exampleMatcher = ExampleMatcher.matching().withMatcher("name",
-					GenericPropertyMatchers.contains());
-			final Example<City> example2 = Example.of(City, exampleMatcher);
-			final Page<City> pages = this.cityRepository.findAll(example2, pageRequest);
+			city.setName(hankakuKeyword);
+			city.setDeleteFlg(Messages.MSG007);
+			final ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+					.withMatcher("name", GenericPropertyMatchers.contains())
+					.withMatcher("deleteFlg", GenericPropertyMatchers.exact());
+			final Example<City> example = Example.of(city, exampleMatcher);
+			final Page<City> pages = this.cityRepository.findAll(example, pageRequest);
 			final List<CityDto> pagesByName = pages.getContent().stream().map(item -> {
 				final CityDto cityDto = new CityDto();
 				BeanUtils.copyProperties(item, cityDto);
-				final String language = this.findLanguageByCty(item.getNation());
+				final String language = this.getLanguage(item.getCountryCode());
+				cityDto.setContinent(item.getCountry().getContinent());
+				cityDto.setNation(item.getCountry().getName());
 				cityDto.setLanguage(language);
 				return cityDto;
 			}).collect(Collectors.toList());
@@ -158,7 +169,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final List<CityDto> pageInfos = pages.getContent().stream().map(item -> {
 			final CityDto cityDto = new CityDto();
 			BeanUtils.copyProperties(item, cityDto);
-			final String language = this.findLanguageByCty(item.getNation());
+			final String language = this.getLanguage(item.getCountryCode());
+			cityDto.setContinent(item.getCountry().getContinent());
+			cityDto.setNation(item.getCountry().getName());
 			cityDto.setLanguage(language);
 			return cityDto;
 		}).collect(Collectors.toList());
@@ -169,9 +182,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	public List<String> findNationsByCityId(final Long id) {
 		final List<String> list = Lists.newArrayList();
 		final City city = this.cityRepository.findById(id).orElseGet(City::new);
-		final String nationName = city.getNation();
+		final String nationName = city.getCountry().getName();
 		list.add(nationName);
-		final List<String> nations = this.countryRepository.findNationsByCnt(City.getContinent());
+		final List<String> nations = this.countryRepository.findNationsByCnt(city.getCountry().getContinent());
 		final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName))
 				.collect(Collectors.toList());
 		list.addAll(collect);
@@ -218,7 +231,28 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		final List<Language> languages = this.languageRepository.getLanguagesByCountryName(nationVal);
+		final String nationCode = this.countryRepository.findNationCode(StringUtils.toHankaku(nationVal));
+		return this.getLanguage(nationCode);
+	}
+
+	@Override
+	public List<City> checkDuplicatedNames(final String cityName) {
+		final City city = new City();
+		city.setName(StringUtils.toHankaku(cityName));
+		city.setDeleteFlg(Messages.MSG007);
+		final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
+		return this.cityRepository.findAll(example);
+	}
+
+	public String getLanguage(final String countryCode) {
+		final Specification<Language> specification1 = (root, query, criteriaBuilder) -> criteriaBuilder
+				.equal(root.get("countryCode"), countryCode);
+		final Specification<Language> specification2 = (root, query, criteriaBuilder) -> {
+			query.orderBy(criteriaBuilder.desc(root.get("percentage")));
+			return criteriaBuilder.equal(root.get("deleteFlg"), Messages.MSG007);
+		};
+		final Specification<Language> languageSpecification = Specification.where(specification1).and(specification2);
+		final List<Language> languages = this.languageRepository.findAll(languageSpecification);
 		if (languages.size() == 1) {
 			return languages.get(0).getName();
 		}
@@ -238,14 +272,5 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			return language1.getName();
 		}
 		return language2.getName();
-	}
-
-	@Override
-	public List<City> checkDuplicatedNames(final String cityName) {
-		final City city = new City();
-		city.setName(StringUtils.toHankaku(cityName));
-		city.setDeleteFlg(Messages.MSG007);
-		final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
-		return this.cityRepository.findAll(example);
 	}
 }
