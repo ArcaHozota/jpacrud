@@ -128,8 +128,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum);
 			}
 			// ページング検索；
-			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
 			final City city = new City();
+			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
 			if (StringUtils.isNotEmpty(nationCode)) {
 				city.setCountryCode(nationCode);
 				city.setDeleteFlg(Messages.MSG007);
