@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -76,6 +80,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		return cityDto;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
 		final int jpaPageNum = pageNum - 1;
@@ -95,10 +100,18 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				if (StringUtils.isNotEmpty(keisan)) {
 					sort = Integer.parseInt(keisan);
 				}
-				// 人口数量昇順で最初の15個都市の情報を吹き出します；
-				final List<CityDto> minimumRanks = this.cityRepository.findMinimumRanks(sort).stream().peek(item -> {
-					final String language = this.findLanguageByCty(item.getNation());
-					item.setLanguage(language);
+				final SessionFactory factory = new Configuration().addAnnotatedClass(City.class).buildSessionFactory();
+				final Session session = factory.getCurrentSession();
+				final Query<City> query = session
+						.createQuery("select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population");
+				final List<City> minimumCities = query.setMaxResults(sort).list();
+				final List<CityDto> minimumRanks = minimumCities.stream().map(item -> {
+					final CityDto cityDto = new CityDto();
+					final String language = this.findLanguageByCty(item.getCountryCode());
+					cityDto.setContinent(item.getCountry().getContinent());
+					cityDto.setNation(item.getCountry().getName());
+					cityDto.setLanguage(language);
+					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
 					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum);
@@ -111,10 +124,18 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				if (StringUtils.isNotEmpty(keisan)) {
 					sort = Integer.parseInt(keisan);
 				}
-				// 人口数量降順で最初の15個都市の情報を吹き出します；
-				final List<CityDto> maximumRanks = this.cityRepository.findMaximumRanks(sort).stream().peek(item -> {
-					final String language = this.findLanguageByCty(item.getNation());
-					item.setLanguage(language);
+				final SessionFactory factory = new Configuration().addAnnotatedClass(City.class).buildSessionFactory();
+				final Session session = factory.getCurrentSession();
+				final Query<City> query = session.createQuery(
+						"select cn from City as cn where cn.deleteFlg = 'visible' order by cn.population desc");
+				final List<City> maximumCities = query.setMaxResults(sort).list();
+				final List<CityDto> maximumRanks = maximumCities.stream().map(item -> {
+					final CityDto cityDto = new CityDto();
+					final String language = this.findLanguageByCty(item.getCountryCode());
+					cityDto.setContinent(item.getCountry().getContinent());
+					cityDto.setNation(item.getCountry().getName());
+					cityDto.setLanguage(language);
+					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
 					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum);
