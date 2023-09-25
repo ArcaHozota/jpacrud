@@ -166,7 +166,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum);
 		}
 		// ページング検索；
-		final Page<City> pages = this.cityRepository.findAll(pageRequest);
+		city.setDeleteFlg(Messages.MSG007);
+		final Example<City> example = Example.of(city, ExampleMatcher.matching());
+		final Page<City> pages = this.cityRepository.findAll(example, pageRequest);
 		final List<CityDto> pageInfos = pages.getContent().stream().map(item -> {
 			final CityDto cityDto = new CityDto();
 			BeanUtils.copyProperties(item, cityDto);
