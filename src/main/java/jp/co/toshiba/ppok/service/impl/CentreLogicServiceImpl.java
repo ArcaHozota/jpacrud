@@ -101,7 +101,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 						.findAll(example, Sort.by(Direction.ASC, "population")).subList(0, sort);
 				final List<CityDto> minimumRanks = minimumCities.stream().map(item -> {
 					final CityDto cityDto = new CityDto();
-					final String language = this.findLanguageByCty(item.getCountryCode());
+					final String language = this.getLanguage(item.getCountryCode());
 					cityDto.setContinent(item.getCountry().getContinent());
 					cityDto.setNation(item.getCountry().getName());
 					cityDto.setLanguage(language);
@@ -124,7 +124,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 						.findAll(example, Sort.by(Direction.DESC, "population")).subList(0, sort);
 				final List<CityDto> maximumRanks = maximumCities.stream().map(item -> {
 					final CityDto cityDto = new CityDto();
-					final String language = this.findLanguageByCty(item.getCountryCode());
+					final String language = this.getLanguage(item.getCountryCode());
 					cityDto.setContinent(item.getCountry().getContinent());
 					cityDto.setNation(item.getCountry().getName());
 					cityDto.setLanguage(language);
