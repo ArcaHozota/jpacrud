@@ -44,7 +44,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	/**
 	 * ページサイズ
 	 */
-	private static final Integer PAGE_SIZE = 17;
+	private static final Integer PAGE_SIZE = 12;
 
 	/**
 	 * デフォルトソート値

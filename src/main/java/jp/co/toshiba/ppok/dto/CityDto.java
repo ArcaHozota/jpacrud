@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 import lombok.Data;
 
+/**
+ * 都市情報DTO
+ *
+ * @author ArcaHozota
+ * @since 1.07
+ */
 @Data
 public final class CityDto implements Serializable {
 
