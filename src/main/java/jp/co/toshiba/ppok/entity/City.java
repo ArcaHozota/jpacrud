@@ -27,7 +27,7 @@ import lombok.Setter;
 @Proxy(lazy = false)
 @NamedQuery(name = "City.removeById", query = "update City as cn set cn.logicDeleteFlg = 'removed' where cn.id =:id")
 @NamedQuery(name = "City.saiban", query = "select count(c.id) + 1 from City as cn")
-public class City implements Serializable {
+public final class City implements Serializable {
 
 	private static final long serialVersionUID = 8251871899988328317L;
 

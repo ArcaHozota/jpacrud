@@ -28,7 +28,7 @@ import lombok.Setter;
 @Table(name = "WORLD_LANGUAGE")
 @Proxy(lazy = false)
 @IdClass(LanguageId.class)
-public class Language implements Serializable {
+public final class Language implements Serializable {
 
 	private static final long serialVersionUID = -2909406519851156194L;
 
