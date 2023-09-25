@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Proxy;
@@ -58,8 +60,15 @@ public final class Language implements Serializable {
 	private BigDecimal percentage;
 
 	/**
-	 * This field corresponds to the database column LOGIC_DELETE_FLG
+	 * This field corresponds to the database column DELETE_FLG
 	 */
 	@Column(nullable = false)
 	private String deleteFlg;
+
+	/**
+	 * This field corresponds to the database table WORLD_COUNTRY
+	 */
+	@ManyToOne
+	@JoinColumn(name = "countryCode", insertable = false, updatable = false)
+	private Country country;
 }

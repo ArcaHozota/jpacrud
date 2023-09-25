@@ -62,7 +62,7 @@ public final class City implements Serializable {
 	private Long population;
 
 	/**
-	 * This field corresponds to the database column LOGIC_DELETE_FLG
+	 * This field corresponds to the database column DELETE_FLG
 	 */
 	@Column(nullable = false)
 	private String deleteFlg;

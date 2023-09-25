@@ -2,11 +2,14 @@ package jp.co.toshiba.ppok.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Proxy;
@@ -118,8 +121,14 @@ public final class Country implements Serializable {
 	private String code2;
 
 	/**
-	 * This field corresponds to the database column LOGIC_DELETE_FLG
+	 * This field corresponds to the database column DELETE_FLG
 	 */
 	@Column(nullable = false)
 	private String deleteFlg;
+
+	/**
+	 * This field corresponds to the database table LANGUAGE
+	 */
+	@OneToMany(mappedBy = "WORLD_COUNTRY", cascade = CascadeType.ALL)
+	private List<Language> languages;
 }
