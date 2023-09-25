@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -39,6 +38,5 @@ public interface CountryRepository extends JpaRepository<Country, String>, JpaSp
 	 * @param name 国名
 	 * @return String
 	 */
-	@Query(value = "SELECT WCY.CODE FROM WORLD_COUNTRY WCY WHERE LOGIC_DELETE_FLG = 'visible' AND WCY.NAME =:name", nativeQuery = true)
 	String findNationCode(@Param("name") String name);
 }
