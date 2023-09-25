@@ -24,7 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "WORLD_CITY_VIEW")
 @Proxy(lazy = false)
-public class CityView implements Serializable {
+public final class CityView implements Serializable {
 
 	private static final long serialVersionUID = -5318717623213325302L;
 
