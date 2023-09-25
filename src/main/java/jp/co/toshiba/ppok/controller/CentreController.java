@@ -23,7 +23,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Main-Controller
+ * 中央処理コントローラ
  *
  * @author ArcaHozota
  * @since 1.11
@@ -34,12 +34,12 @@ import lombok.RequiredArgsConstructor;
 public class CentreController {
 
 	/**
-	 * Central logic service
+	 * 中央処理サービスインターフェス
 	 */
 	private final CentreLogicService centreLogicService;
 
 	/**
-	 * Retrieve the data of cities.
+	 * 都市情報をページング検索する
 	 *
 	 * @return page(JSON)
 	 */
@@ -51,9 +51,9 @@ public class CentreController {
 	}
 
 	/**
-	 * Search the selected city's name.
+	 * 選択された都市情報を取得する
 	 *
-	 * @param id the ID of city
+	 * @param id 都市ID
 	 * @return RestMsg.success().add(data)
 	 */
 	@GetMapping(value = "/city/{id}")
@@ -63,9 +63,9 @@ public class CentreController {
 	}
 
 	/**
-	 * Save input city info.
+	 * 都市情報を保存する
 	 *
-	 * @param cityDto the input message of cities
+	 * @param cityDto 都市情報DTO
 	 * @return RestMsg.success()
 	 */
 	@PostMapping(value = "/city")
@@ -75,9 +75,9 @@ public class CentreController {
 	}
 
 	/**
-	 * Update city info.
+	 * 都市情報を更新する
 	 *
-	 * @param cityDto the input message of cities
+	 * @param cityDto 都市情報DTO
 	 * @return RestMsg.success()
 	 */
 	@PutMapping(value = "/city/{id}")
@@ -87,9 +87,9 @@ public class CentreController {
 	}
 
 	/**
-	 * Delete the selected city info.
+	 * 都市IDによって都市情報を削除する(論理削除)
 	 *
-	 * @param id the ID of city
+	 * @param id 都市ID
 	 * @return RestMsg.success()
 	 */
 	@DeleteMapping(value = "/city/{id}")
@@ -99,9 +99,9 @@ public class CentreController {
 	}
 
 	/**
-	 * Check the input city name already existed or not.
+	 * 都市名を重複するかどうかを確認する
 	 *
-	 * @param cityName the input name
+	 * @param cityName 都市名
 	 * @return RestMsg.success()
 	 */
 	@GetMapping(value = "/checklist")
@@ -117,7 +117,7 @@ public class CentreController {
 	}
 
 	/**
-	 * Get list of continents.
+	 * 大陸リストを検索する
 	 *
 	 * @return RestMsg.success().add(data)
 	 */
@@ -128,7 +128,7 @@ public class CentreController {
 	}
 
 	/**
-	 * Get list of nations.
+	 * 大陸によってすべての国を検索する
 	 *
 	 * @return RestMsg.success().add(data)
 	 */
@@ -139,7 +139,7 @@ public class CentreController {
 	}
 
 	/**
-	 * Get list of nations.
+	 * 選択された都市の大陸によってすべての国を検索する
 	 *
 	 * @return RestMsg.success().add(data)
 	 */
@@ -150,7 +150,7 @@ public class CentreController {
 	}
 
 	/**
-	 * Get language by nation.
+	 * 国名によって公用語を取得する
 	 *
 	 * @return RestMsg.success().add(data)
 	 */

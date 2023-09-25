@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
  * ウェブコンフィギュレーション
  *
  * @author Administrator
- * @since 2022-11-08
+ * @since 1.08
  */
 @Log4j2
 @Configuration
