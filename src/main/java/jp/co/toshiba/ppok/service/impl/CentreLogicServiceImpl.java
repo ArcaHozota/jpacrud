@@ -77,6 +77,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	@Override
 	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
 		final int jpaPageNum = pageNum - 1;
+		// エンティティを宣言する；
+		final City city = new City();
 		// ページングコンストラクタを宣言する；
 		final PageRequest pageRequest = PageRequest.of(jpaPageNum, PAGE_SIZE, Sort.by(Direction.ASC, "id"));
 		// キーワードの属性を判断する；
@@ -128,7 +130,6 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum);
 			}
 			// ページング検索；
-			final City city = new City();
 			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
 			if (StringUtils.isNotEmpty(nationCode)) {
 				city.setCountryCode(nationCode);
