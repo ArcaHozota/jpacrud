@@ -76,7 +76,6 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		return cityDto;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
 		final int jpaPageNum = pageNum - 1;
