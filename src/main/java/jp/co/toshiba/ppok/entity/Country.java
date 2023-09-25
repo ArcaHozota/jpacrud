@@ -130,5 +130,5 @@ public final class Country implements Serializable {
 	 * This field corresponds to the database table LANGUAGE
 	 */
 	@OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
-	private List<Language> languages;
+	private List<City> cities;
 }
