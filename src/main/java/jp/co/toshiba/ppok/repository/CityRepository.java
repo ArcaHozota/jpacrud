@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.toshiba.ppok.entity.City;
-import jp.co.toshiba.ppok.entity.CityView;
 import oracle.jdbc.driver.OracleSQLException;
 
 /**
@@ -45,7 +44,7 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 */
 	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION "
 			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
-	List<CityView> findMinimumRanks(@Param("sortNumber") Integer sort);
+	List<City> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
 	 * 人口数量降順で都市情報を検索する
@@ -54,5 +53,5 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 */
 	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION "
 			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION DESC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
-	List<CityView> findMaximumRanks(@Param("sortNumber") Integer sort);
+	List<City> findMaximumRanks(@Param("sortNumber") Integer sort);
 }
