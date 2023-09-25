@@ -102,8 +102,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				}
 				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
-					final String nationCode = this.countryRepository.findNationCode(item.getNation());
-					final String language = this.getLanguage(nationCode);
+					final String language = this.findLanguageByCty(item.getNation());
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
@@ -120,8 +119,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				}
 				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
-					final String nationCode = this.countryRepository.findNationCode(item.getNation());
-					final String language = this.getLanguage(nationCode);
+					final String language = this.findLanguageByCty(item.getNation());
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
@@ -139,7 +137,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				final List<CityDto> pagesByNation = pages.getContent().stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.getLanguage(nationCode);
+					final String language = this.findLanguageByCty(item.getNation());
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
@@ -151,8 +149,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			final List<CityDto> pagesByName = pages.getContent().stream().map(item -> {
 				final CityDto cityDto = new CityDto();
 				BeanUtils.copyProperties(item, cityDto);
-				final String nationCode2 = this.countryRepository.findNationCode(item.getNation());
-				final String language = this.getLanguage(nationCode2);
+				final String language = this.findLanguageByCty(item.getNation());
 				cityDto.setLanguage(language);
 				return cityDto;
 			}).collect(Collectors.toList());
