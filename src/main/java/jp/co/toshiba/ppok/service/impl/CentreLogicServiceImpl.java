@@ -95,11 +95,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				if (StringUtils.isNotEmpty(keisan)) {
 					sort = Integer.parseInt(keisan);
 				}
-				city.setDeleteFlg(Messages.MSG007);
-				final Example<City> example = Example.of(city, ExampleMatcher.matching());
-				final List<City> minimumCities = this.cityRepository
-						.findAll(example, Sort.by(Direction.ASC, "population")).subList(0, sort);
-				final List<CityDto> minimumRanks = minimumCities.stream().map(item -> {
+				final List<CityDto> minimumRanks = this.cityRepository.findMinimumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					final String language = this.getLanguage(item.getCountryCode());
 					cityDto.setContinent(item.getCountry().getContinent());
@@ -118,11 +114,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				if (StringUtils.isNotEmpty(keisan)) {
 					sort = Integer.parseInt(keisan);
 				}
-				city.setDeleteFlg(Messages.MSG007);
-				final Example<City> example = Example.of(city, ExampleMatcher.matching());
-				final List<City> maximumCities = this.cityRepository
-						.findAll(example, Sort.by(Direction.DESC, "population")).subList(0, sort);
-				final List<CityDto> maximumRanks = maximumCities.stream().map(item -> {
+				final List<CityDto> maximumRanks = this.cityRepository.findMaximumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					final String language = this.getLanguage(item.getCountryCode());
 					cityDto.setContinent(item.getCountry().getContinent());
