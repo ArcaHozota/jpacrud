@@ -94,14 +94,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					sort = Integer.parseInt(keisan);
 				}
 				// 人口数量昇順で最初の15個都市の情報を吹き出します；
-				final List<CityDto> minimumRanks = this.cityRepository.findMinimumRanks(sort).stream().map(item -> {
-					final CityDto cityDto = new CityDto();
-					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.getLanguage(item.getCountryCode());
-					cityDto.setContinent(item.getCountry().getContinent());
-					cityDto.setNation(item.getCountry().getName());
-					cityDto.setLanguage(language);
-					return cityDto;
+				final List<CityDto> minimumRanks = this.cityRepository.findMinimumRanks(sort).stream().peek(item -> {
+					final String language = this.findLanguageByCty(item.getNation());
+					item.setLanguage(language);
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
 					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum);
@@ -115,14 +110,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					sort = Integer.parseInt(keisan);
 				}
 				// 人口数量降順で最初の15個都市の情報を吹き出します；
-				final List<CityDto> maximumRanks = this.cityRepository.findMaximumRanks(sort).stream().map(item -> {
-					final CityDto cityDto = new CityDto();
-					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.getLanguage(item.getCountryCode());
-					cityDto.setContinent(item.getCountry().getContinent());
-					cityDto.setNation(item.getCountry().getName());
-					cityDto.setLanguage(language);
-					return cityDto;
+				final List<CityDto> maximumRanks = this.cityRepository.findMaximumRanks(sort).stream().peek(item -> {
+					final String language = this.findLanguageByCty(item.getNation());
+					item.setLanguage(language);
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
 					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum);
