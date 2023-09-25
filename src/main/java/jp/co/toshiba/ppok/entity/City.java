@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Proxy;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +27,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "WORLD_CITY")
+@Proxy(lazy = false)
 @NamedQuery(name = "City.saiban", query = "select count(cn.id) + 1 from City as cn")
 @NamedQuery(name = "City.removeById", query = "update City as cn set cn.deleteFlg = 'removed' where cn.id =:id")
 public final class City implements Serializable {

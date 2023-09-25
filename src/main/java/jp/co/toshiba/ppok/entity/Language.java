@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Proxy;
+
 import jp.co.toshiba.ppok.utils.LanguageId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "WORLD_LANGUAGE")
+@Proxy(lazy = false)
 @IdClass(LanguageId.class)
 public final class Language implements Serializable {
 
