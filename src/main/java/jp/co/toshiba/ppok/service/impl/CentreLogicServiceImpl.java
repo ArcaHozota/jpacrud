@@ -26,6 +26,7 @@ import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.repository.CountryRepository;
 import jp.co.toshiba.ppok.repository.LanguageRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
+import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
 import jp.co.toshiba.ppok.utils.StringUtils;
 import lombok.AccessLevel;
@@ -260,8 +261,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	public List<City> checkDuplicatedNames(final String cityName) {
 		final City city = new City();
 		city.setName(StringUtils.toHankaku(cityName));
-		final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name", GenericPropertyMatchers.exact());
-		final Example<City> example = Example.of(city, matcher);
+		city.setDeleteFlg(Messages.MSG007);
+		final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
 		return this.cityRepository.findAll(example);
 	}
 }
