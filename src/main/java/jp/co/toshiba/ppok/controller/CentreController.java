@@ -23,9 +23,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 中央処理コントローラ
+ * Main-Controller
  *
- * @author Arcahozota
+ * @author ArcaHozota
  * @since 1.11
  */
 @RestController
@@ -34,12 +34,12 @@ import lombok.RequiredArgsConstructor;
 public class CentreController {
 
 	/**
-	 * 中央処理サービスインターフェス
+	 * Central logic service
 	 */
 	private final CentreLogicService centreLogicService;
 
 	/**
-	 * Retrieve the city data.
+	 * Retrieve the data of cities.
 	 *
 	 * @return page(JSON)
 	 */
