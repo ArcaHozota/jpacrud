@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Proxy;
@@ -30,6 +31,8 @@ import lombok.Setter;
 @Table(name = "WORLD_LANGUAGE")
 @Proxy(lazy = false)
 @IdClass(LanguageId.class)
+@NamedQuery(name = "Language.getLanguagesByCountryName", query = "select nl from Language as nl "
+		+ "where nl.deleteFlg = 'visible' and nl.country.name =:countryName order by nl.percentage")
 public final class Language implements Serializable {
 
 	private static final long serialVersionUID = -2909406519851156194L;
