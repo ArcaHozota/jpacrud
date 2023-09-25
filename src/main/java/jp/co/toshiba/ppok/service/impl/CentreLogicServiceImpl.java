@@ -163,8 +163,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final List<CityDto> pageInfos = pages.getContent().stream().map(item -> {
 			final CityDto cityDto = new CityDto();
 			BeanUtils.copyProperties(item, cityDto);
-			final String nationCode = this.countryRepository.findNationCode(item.getNation());
-			final String language = this.getLanguage(nationCode);
+			final String language = this.findLanguageByCty(item.getNation());
 			cityDto.setLanguage(language);
 			return cityDto;
 		}).collect(Collectors.toList());
@@ -224,8 +223,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		final String nationCode = this.countryRepository.findNationCode(StringUtils.toHankaku(nationVal));
-		return this.getLanguage(nationCode);
+		return this.languageRepository.findLanguageByCountryName(nationVal);
 	}
 
 	@Override
