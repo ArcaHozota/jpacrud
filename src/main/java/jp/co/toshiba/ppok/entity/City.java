@@ -19,7 +19,8 @@ import lombok.Setter;
 /**
  * 都市テーブルWORLD_CITYのエンティティ
  *
- * @author Administrator
+ * @author ArcaHozota
+ * @since 1.02
  */
 @Entity
 @Getter
