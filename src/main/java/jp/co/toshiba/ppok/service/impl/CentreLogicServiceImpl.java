@@ -226,10 +226,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		final String hankaku = StringUtils.toHankaku(nationVal);
-		final String nationCode = this.countryRepository.findNationCode(hankaku);
 		final Specification<Language> specification1 = (root, query, criteriaBuilder) -> criteriaBuilder
-				.equal(root.get("countryCode"), nationCode);
+				.equal(root.get("country.name"), StringUtils.toHankaku(nationVal));
 		final Specification<Language> specification2 = (root, query, criteriaBuilder) -> {
 			query.orderBy(criteriaBuilder.desc(root.get("percentage")));
 			return criteriaBuilder.equal(root.get("deleteFlg"), Messages.MSG007);
