@@ -21,7 +21,8 @@ import lombok.Setter;
 /**
  * 国家テーブルWORLD_COUNTRYのエンティティ
  *
- * @author Administrator
+ * @author ArcaHozota
+ * @since 1.02
  */
 @Entity
 @Getter

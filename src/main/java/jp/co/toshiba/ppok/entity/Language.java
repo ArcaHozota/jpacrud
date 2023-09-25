@@ -20,7 +20,8 @@ import lombok.Setter;
 /**
  * 言語テーブルWORLD_LANGUAGEのエンティティ
  *
- * @author Administrator
+ * @author ArcaHozota
+ * @since 1.02
  */
 @Entity
 @Getter
