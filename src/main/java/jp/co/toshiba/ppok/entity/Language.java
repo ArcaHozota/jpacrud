@@ -7,8 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -67,11 +65,4 @@ public final class Language implements Serializable {
 	 */
 	@Column(nullable = false)
 	private String deleteFlg;
-
-	/**
-	 * This field corresponds to the database table WORLD_COUNTRY
-	 */
-	@ManyToOne
-	@JoinColumn(name = "countryCode", insertable = false, updatable = false)
-	private Country country;
 }
