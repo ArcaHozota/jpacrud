@@ -1,6 +1,5 @@
 package jp.co.toshiba.ppok.service.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -19,7 +17,6 @@ import com.google.common.collect.Lists;
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
 import jp.co.toshiba.ppok.entity.CityView;
-import jp.co.toshiba.ppok.entity.Language;
 import jp.co.toshiba.ppok.repository.CityRepository;
 import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.repository.CountryRepository;
@@ -75,8 +72,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 		final CityDto cityDto = new CityDto();
 		BeanUtils.copyProperties(cityView, cityDto);
-		final String nationCode = this.countryRepository.findNationCode(cityView.getNation());
-		final String language = this.getLanguage(nationCode);
+		final String language = this.findLanguageByCty(cityView.getNation());
 		cityDto.setLanguage(language);
 		return cityDto;
 	}
@@ -230,35 +226,5 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		city.setDeleteFlg(Messages.MSG007);
 		final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
 		return this.cityRepository.findAll(example);
-	}
-
-	public String getLanguage(final String countryCode) {
-		final Specification<Language> specification1 = (root, query, criteriaBuilder) -> criteriaBuilder
-				.equal(root.get("countryCode"), countryCode);
-		final Specification<Language> specification2 = (root, query, criteriaBuilder) -> {
-			query.orderBy(criteriaBuilder.desc(root.get("percentage")));
-			return criteriaBuilder.equal(root.get("deleteFlg"), Messages.MSG007);
-		};
-		final Specification<Language> languageSpecification = Specification.where(specification1).and(specification2);
-		final List<Language> languages = this.languageRepository.findAll(languageSpecification);
-		if (languages.size() == 1) {
-			return languages.get(0).getName();
-		}
-		final List<Language> officialLanguages = languages.stream()
-				.filter(al -> StringUtils.isEqual("True", al.getIsOfficial())).collect(Collectors.toList());
-		final List<Language> typicalLanguages = languages.stream()
-				.filter(al -> StringUtils.isEqual("False", al.getIsOfficial())).collect(Collectors.toList());
-		if (officialLanguages.isEmpty() && !typicalLanguages.isEmpty()) {
-			return typicalLanguages.get(0).getName();
-		}
-		if (!officialLanguages.isEmpty() && typicalLanguages.isEmpty()) {
-			return officialLanguages.get(0).getName();
-		}
-		final Language language1 = officialLanguages.get(0);
-		final Language language2 = typicalLanguages.get(0);
-		if (language2.getPercentage().subtract(language1.getPercentage()).compareTo(BigDecimal.valueOf(35L)) <= 0) {
-			return language1.getName();
-		}
-		return language2.getName();
 	}
 }
