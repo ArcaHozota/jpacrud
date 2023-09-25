@@ -8,7 +8,7 @@ import jp.co.toshiba.ppok.utils.Messages;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * JpaSsmcrudアプリケーション
+ * Sshcrudアプリケーション
  *
  * @author ArcaHozota
  * @since 1.01
@@ -16,9 +16,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @SpringBootApplication
 @ServletComponentScan
-public class JpaSsmcrudApplication {
+public class SshcrudApplication {
 	public static void main(final String[] args) {
-		SpringApplication.run(JpaSsmcrudApplication.class, args);
+		SpringApplication.run(SshcrudApplication.class, args);
 		log.info(Messages.MSG003);
 	}
 }
