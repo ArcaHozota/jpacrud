@@ -35,6 +35,12 @@ public final class CityView implements Serializable {
 	private Long id;
 
 	/**
+	 * This field corresponds to the database column NAME
+	 */
+	@Column(nullable = false)
+	private String name;
+
+	/**
 	 * This field corresponds to the database column CONTINENT
 	 */
 	@Column(nullable = false)
@@ -47,12 +53,6 @@ public final class CityView implements Serializable {
 	private String nation;
 
 	/**
-	 * This field corresponds to the database column NAME
-	 */
-	@Column(nullable = false)
-	private String name;
-
-	/**
 	 * This field corresponds to the database column DISTRICT
 	 */
 	@Column(nullable = false)
@@ -63,4 +63,9 @@ public final class CityView implements Serializable {
 	 */
 	@Column(nullable = false)
 	private Long population;
+
+	/**
+	 * This field corresponds to the database column LANGUAGE
+	 */
+	private String language;
 }
