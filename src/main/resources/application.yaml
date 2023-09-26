@@ -22,3 +22,4 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+# DBFile is in the classpath:public/dbfile/world.sql
