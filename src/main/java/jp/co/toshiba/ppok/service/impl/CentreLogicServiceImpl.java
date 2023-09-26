@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -140,7 +141,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum);
 			}
 			cityView.setName(hankakuKeyword);
-			final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
+			final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name",
+					GenericPropertyMatchers.contains());
+			final Example<CityView> example = Example.of(cityView, matcher);
 			final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
 			final List<CityDto> pagesByName = pages.getContent().stream().map(item -> {
 				final CityDto cityDto = new CityDto();
