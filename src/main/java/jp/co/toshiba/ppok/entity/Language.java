@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Proxy;
-
 import jp.co.toshiba.ppok.utils.LanguageId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +24,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "WORLD_LANGUAGE")
-@Proxy(lazy = false)
 @IdClass(LanguageId.class)
+@Table(name = "WORLD_LANGUAGE")
 public final class Language implements Serializable {
 
 	private static final long serialVersionUID = -2909406519851156194L;

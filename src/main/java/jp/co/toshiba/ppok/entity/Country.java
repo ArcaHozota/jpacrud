@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Proxy;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +24,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "WORLD_COUNTRY")
-@Proxy(lazy = false)
 @NamedQuery(name = "Country.findNationCode", query = "select cty.code from Country as cty where cty.deleteFlg = 'visible' and cty.name =:name")
 @NamedQuery(name = "Country.findAllContinents", query = "select distinct cty.continent from Country as cty where cty.deleteFlg = 'visible' order by cty.continent asc")
 @NamedQuery(name = "Country.findNationsByCnt", query = "select distinct cty.name from Country as cty where cty.deleteFlg = 'visible' and cty.continent =:continent order by cty.name asc")
