@@ -99,8 +99,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				}
 				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
-					final String language = this.findLanguageByCty(item.getNation());
-					cityDto.setLanguage(language);
+					BeanUtils.copyProperties(item, cityDto);
 					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
@@ -116,8 +115,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				}
 				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream().map(item -> {
 					final CityDto cityDto = new CityDto();
-					final String language = this.findLanguageByCty(item.getNation());
-					cityDto.setLanguage(language);
+					BeanUtils.copyProperties(item, cityDto);
 					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
@@ -134,8 +132,6 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				final List<CityDto> pagesByNation = pages.getContent().stream().map(item -> {
 					final CityDto cityDto = new CityDto();
 					BeanUtils.copyProperties(item, cityDto);
-					final String language = this.findLanguageByCty(item.getNation());
-					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
 				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, PAGE_SIZE);
@@ -148,8 +144,6 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			final List<CityDto> pagesByName = pages.getContent().stream().map(item -> {
 				final CityDto cityDto = new CityDto();
 				BeanUtils.copyProperties(item, cityDto);
-				final String language = this.findLanguageByCty(item.getNation());
-				cityDto.setLanguage(language);
 				return cityDto;
 			}).collect(Collectors.toList());
 			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE);
@@ -159,11 +153,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final List<CityDto> pageInfos = pages.getContent().stream().map(item -> {
 			final CityDto cityDto = new CityDto();
 			BeanUtils.copyProperties(item, cityDto);
-			final String language = this.findLanguageByCty(item.getNation());
-			cityDto.setLanguage(language);
 			return cityDto;
 		}).collect(Collectors.toList());
-		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum);
+		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum, PAGE_SIZE);
 	}
 
 	@Override
