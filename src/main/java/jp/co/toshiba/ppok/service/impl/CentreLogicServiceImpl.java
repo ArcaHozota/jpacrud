@@ -104,9 +104,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
-					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum);
+					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum, PAGE_SIZE);
 				}
-				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum);
+				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum, PAGE_SIZE);
 			}
 			if (hankakuKeyword.startsWith("max(pop)")) {
 				final int indexOf = hankakuKeyword.indexOf(")");
@@ -121,9 +121,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					return cityDto;
 				}).collect(Collectors.toList());
 				if (pageMax >= sort) {
-					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum);
+					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum, PAGE_SIZE);
 				}
-				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum);
+				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum, PAGE_SIZE);
 			}
 			// ページング検索；
 			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
@@ -138,7 +138,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					cityDto.setLanguage(language);
 					return cityDto;
 				}).collect(Collectors.toList());
-				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum);
+				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, PAGE_SIZE);
 			}
 			cityView.setName(hankakuKeyword);
 			final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name",
@@ -152,7 +152,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				cityDto.setLanguage(language);
 				return cityDto;
 			}).collect(Collectors.toList());
-			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum);
+			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE);
 		}
 		// ページング検索；
 		final Page<CityView> pages = this.cityViewRepository.findAll(pageRequest);
