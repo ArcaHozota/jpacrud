@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * @author Administrator
+ * インデクスコントローラ
+ *
+ * @author ArcaHozota
+ * @since 1.20
  */
 @Controller
 public class IndexController {
