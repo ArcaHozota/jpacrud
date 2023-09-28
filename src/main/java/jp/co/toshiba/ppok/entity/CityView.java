@@ -5,6 +5,7 @@ import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "WORLD_CITY_VIEW")
+@NamedQuery(name = "CityView.getLanguage", query = "select max(cv.language) from CityView as cv where cv.nation =:nation group by cv.nation")
 public final class CityView implements Serializable {
 
 	private static final long serialVersionUID = -5318717623213325302L;

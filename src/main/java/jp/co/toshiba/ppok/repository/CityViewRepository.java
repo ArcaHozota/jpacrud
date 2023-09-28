@@ -19,6 +19,14 @@ import jp.co.toshiba.ppok.entity.CityView;
 public interface CityViewRepository extends JpaRepository<CityView, Long>, JpaSpecificationExecutor<CityView> {
 
 	/**
+	 * 国名によって公用語を取得する
+	 *
+	 * @param nationVal 国名
+	 * @return String
+	 */
+	String getLanguage(@Param("nation") String nationVal);
+
+	/**
 	 * 人口数量昇順で都市情報を検索する
 	 *
 	 * @return List<CityView>
