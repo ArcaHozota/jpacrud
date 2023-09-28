@@ -1,9 +1,7 @@
 package jp.co.toshiba.ppok.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
@@ -71,11 +69,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	@Override
 	public CityDto getCityInfoById(final Long id) {
 		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
-		final CityDto cityDto = new CityDto();
-		BeanUtils.copyProperties(cityView, cityDto);
-		final String language = this.findLanguageByCty(cityView.getNation());
-		cityDto.setLanguage(language);
-		return cityDto;
+		return new CityDto(cityView.getId(), cityView.getName(), cityView.getContinent(), cityView.getNation(),
+				cityView.getDistrict(), cityView.getPopulation(), cityView.getLanguage());
 	}
 
 	@Override
@@ -97,11 +92,10 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				if (StringUtils.isNotEmpty(keisan)) {
 					sort = Integer.parseInt(keisan);
 				}
-				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream().map(item -> {
-					final CityDto cityDto = new CityDto();
-					BeanUtils.copyProperties(item, cityDto);
-					return cityDto;
-				}).collect(Collectors.toList());
+				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream()
+						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+								item.getDistrict(), item.getPopulation(), item.getLanguage()))
+						.toList();
 				if (pageMax >= sort) {
 					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum, PAGE_SIZE);
 				}
@@ -113,11 +107,10 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				if (StringUtils.isNotEmpty(keisan)) {
 					sort = Integer.parseInt(keisan);
 				}
-				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream().map(item -> {
-					final CityDto cityDto = new CityDto();
-					BeanUtils.copyProperties(item, cityDto);
-					return cityDto;
-				}).collect(Collectors.toList());
+				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream()
+						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+								item.getDistrict(), item.getPopulation(), item.getLanguage()))
+						.toList();
 				if (pageMax >= sort) {
 					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum, PAGE_SIZE);
 				}
@@ -129,11 +122,10 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				cityView.setNation(hankakuKeyword);
 				final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
 				final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
-				final List<CityDto> pagesByNation = pages.getContent().stream().map(item -> {
-					final CityDto cityDto = new CityDto();
-					BeanUtils.copyProperties(item, cityDto);
-					return cityDto;
-				}).collect(Collectors.toList());
+				final List<CityDto> pagesByNation = pages.getContent().stream()
+						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+								item.getDistrict(), item.getPopulation(), item.getLanguage()))
+						.toList();
 				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, PAGE_SIZE);
 			}
 			cityView.setName(hankakuKeyword);
@@ -141,20 +133,18 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					GenericPropertyMatchers.contains());
 			final Example<CityView> example = Example.of(cityView, matcher);
 			final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
-			final List<CityDto> pagesByName = pages.getContent().stream().map(item -> {
-				final CityDto cityDto = new CityDto();
-				BeanUtils.copyProperties(item, cityDto);
-				return cityDto;
-			}).collect(Collectors.toList());
+			final List<CityDto> pagesByName = pages.getContent().stream()
+					.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+							item.getDistrict(), item.getPopulation(), item.getLanguage()))
+					.toList();
 			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE);
 		}
 		// ページング検索；
 		final Page<CityView> pages = this.cityViewRepository.findAll(pageRequest);
-		final List<CityDto> pageInfos = pages.getContent().stream().map(item -> {
-			final CityDto cityDto = new CityDto();
-			BeanUtils.copyProperties(item, cityDto);
-			return cityDto;
-		}).collect(Collectors.toList());
+		final List<CityDto> pageInfos = pages.getContent().stream()
+				.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+						item.getDistrict(), item.getPopulation(), item.getLanguage()))
+				.toList();
 		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum, PAGE_SIZE);
 	}
 
@@ -165,30 +155,32 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final String nationName = cityView.getNation();
 		list.add(nationName);
 		final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
-		final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName))
-				.collect(Collectors.toList());
+		final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName)).toList();
 		list.addAll(collect);
 		return list;
 	}
 
 	@Override
 	public void updateById(final CityDto cityDto) {
-		final City city = new City();
-		BeanUtils.copyProperties(cityDto, city, "continent", "nation", "language");
-		final String nationName = cityDto.getNation();
-		final String nationCode = this.countryRepository.findNationCode(nationName);
+		final String nationCode = this.countryRepository.findNationCode(cityDto.nation());
+		final City city = this.cityRepository.findById(cityDto.id()).orElseGet(City::new);
+		city.setName(cityDto.name());
 		city.setCountryCode(nationCode);
+		city.setDistrict(cityDto.district());
+		city.setPopulation(cityDto.population());
 		this.cityRepository.save(city);
 	}
 
 	@Override
 	public void saveById(final CityDto cityDto) {
-		final City city = new City();
-		BeanUtils.copyProperties(cityDto, city, "continent", "nation", "language");
+		final String nationCode = this.countryRepository.findNationCode(cityDto.nation());
 		final Long saiban = this.cityRepository.saiban();
-		final String nationCode = this.countryRepository.findNationCode(cityDto.getNation());
+		final City city = new City();
 		city.setId(saiban);
+		city.setName(cityDto.name());
 		city.setCountryCode(nationCode);
+		city.setDistrict(cityDto.district());
+		city.setPopulation(cityDto.population());
 		city.setDeleteFlg(Messages.MSG007);
 		this.cityRepository.save(city);
 	}
