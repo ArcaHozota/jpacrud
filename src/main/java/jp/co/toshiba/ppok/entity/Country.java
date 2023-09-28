@@ -24,8 +24,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "WORLD_COUNTRY")
 @NamedQuery(name = "Country.findNationCode", query = "select cty.code from Country as cty where cty.deleteFlg = 'visible' and cty.name =:name")
-@NamedQuery(name = "Country.findAllContinents", query = "select distinct cty.continent from Country as cty where cty.deleteFlg = 'visible' order by cty.continent asc")
-@NamedQuery(name = "Country.findNationsByCnt", query = "select distinct cty.name from Country as cty where cty.deleteFlg = 'visible' and cty.continent =:continent order by cty.name asc")
+@NamedQuery(name = "Country.findAllContinents", query = "select max(cty.continent) from Country as cty where cty.deleteFlg = 'visible' group by cty.continent order by cty.continent asc")
+@NamedQuery(name = "Country.findNationsByCnt", query = "select max(cty.name) from Country as cty where cty.deleteFlg = 'visible' and cty.continent =:continent group by cty.name order by cty.name asc")
 public final class Country implements Serializable {
 
 	private static final long serialVersionUID = 8200490748915737257L;
