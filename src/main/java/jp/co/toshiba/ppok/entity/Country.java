@@ -74,7 +74,7 @@ public final class Country implements Serializable {
 	/**
 	 * This field corresponds to the database column LIFE_EXPECTANCY
 	 */
-	@Column(precision = 5, scale = 1)
+	@Column(precision = 5, scale = 2)
 	private BigDecimal lifeExpectancy;
 
 	/**
