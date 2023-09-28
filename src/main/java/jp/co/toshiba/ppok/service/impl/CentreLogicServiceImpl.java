@@ -19,7 +19,6 @@ import jp.co.toshiba.ppok.entity.CityView;
 import jp.co.toshiba.ppok.repository.CityRepository;
 import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.repository.CountryRepository;
-import jp.co.toshiba.ppok.repository.LanguageRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
@@ -60,11 +59,6 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	 * 国家リポジトリ
 	 */
 	private final CountryRepository countryRepository;
-
-	/**
-	 * 言語リポジトリ
-	 */
-	private final LanguageRepository languageRepository;
 
 	@Override
 	public CityDto getCityInfoById(final Long id) {
@@ -203,7 +197,10 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		return this.languageRepository.findLanguageByCountryName(nationVal);
+		final CityView cityView = new CityView();
+		cityView.setNation(nationVal);
+		final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
+		return this.cityViewRepository.findOne(example).orElseGet(CityView::new).getLanguage();
 	}
 
 	@Override
