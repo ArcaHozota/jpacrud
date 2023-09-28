@@ -51,7 +51,7 @@ public final class Language implements Serializable {
 	/**
 	 * This field corresponds to the database column PERCENTAGE
 	 */
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 5, scale = 2)
 	private BigDecimal percentage;
 
 	/**

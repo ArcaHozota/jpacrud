@@ -57,7 +57,7 @@ public final class Country implements Serializable {
 	/**
 	 * This field corresponds to the database column SURFACE_AREA
 	 */
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 27, scale = 6)
 	private BigDecimal surfaceArea;
 
 	/**
@@ -74,16 +74,19 @@ public final class Country implements Serializable {
 	/**
 	 * This field corresponds to the database column LIFE_EXPECTANCY
 	 */
+	@Column(precision = 5, scale = 1)
 	private BigDecimal lifeExpectancy;
 
 	/**
 	 * This field corresponds to the database column GNP_USD
 	 */
+	@Column(precision = 27, scale = 6)
 	private BigDecimal gnpUsd;
 
 	/**
 	 * This field corresponds to the database column GNP_USD_OLD
 	 */
+	@Column(precision = 27, scale = 6)
 	private BigDecimal gnpUsdOld;
 
 	/**
