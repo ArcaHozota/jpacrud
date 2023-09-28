@@ -200,7 +200,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final CityView cityView = new CityView();
 		cityView.setNation(nationVal);
 		final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
-		return this.cityViewRepository.findOne(example).orElseGet(CityView::new).getLanguage();
+		return this.cityViewRepository.findAll(example).get(0).getLanguage();
 	}
 
 	@Override
