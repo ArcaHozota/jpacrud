@@ -197,10 +197,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		final CityView cityView = new CityView();
-		cityView.setNation(nationVal);
-		final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
-		return this.cityViewRepository.findAll(example).get(0).getLanguage();
+		return this.cityViewRepository.getLanguage(nationVal);
 	}
 
 	@Override
