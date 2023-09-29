@@ -151,10 +151,12 @@ $("#cityAddModalBtn").on('click', function() {
 	formReset("#cityAddModal form");
 	getContinent("#continentInput");
 	getNations($("#nationInput"), 'Africa');
-	$("#cityAddModal").modal({
+	let myModal = new bootstrap.Modal(document.getElementById('cityAddModal'), {
 		backdrop: 'static'
 	});
+	myModal.show();
 });
+
 
 // Add click function to select of continent.
 $("#continentInput").on('change', function() {
