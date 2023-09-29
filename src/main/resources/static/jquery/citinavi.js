@@ -151,10 +151,10 @@ $("#cityAddModalBtn").on('click', function() {
 	formReset("#cityAddModal form");
 	getContinent("#continentInput");
 	getNations($("#nationInput"), 'Africa');
-	let myModal = new bootstrap.Modal(document.getElementById('cityAddModal'), {
+	let addModal = new bootstrap.Modal(document.getElementById('cityAddModal'), {
 		backdrop: 'static'
 	});
-	myModal.show();
+	addModal.show();
 });
 
 
@@ -281,9 +281,10 @@ $(document).on('click', '.edit_btn', function() {
 	formReset("#cityEditModal form");
 	getCityInfo(editId);
 	$("#cityInfoChangeBtn").attr("editId", editId);
-	$("#cityEditModal").modal({
+	let editModal = new bootstrap.Modal(document.getElementById('cityEditModal'), {
 		backdrop: 'static'
 	});
+	editModal.show();
 });
 
 // Get the selected city infos.
