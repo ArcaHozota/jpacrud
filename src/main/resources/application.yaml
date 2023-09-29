@@ -17,6 +17,7 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     database: ORACLE
+    database-platform: org.hibernate.dialect.OracleDialect
     show-sql: true
     open-in-view: false
   output:
