@@ -1,4 +1,4 @@
-const pathdeApp = "grssmcrud";
+const pathdeApp = "sshcrud";
 
 let totalRecord, totalPages, currentPage;
 

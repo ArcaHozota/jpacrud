@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.11
  */
 @RestController
-@RequestMapping("/public/grssmcrud")
+@RequestMapping("/public/sshcrud")
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CentreController {
 
