@@ -36,6 +36,11 @@ import lombok.RequiredArgsConstructor;
 public class CentreLogicServiceImpl implements CentreLogicService {
 
 	/**
+	 * ページングナヴィゲーション
+	 */
+	private static final Integer NAVIGATATION_PAGES = 7;
+
+	/**
 	 * ページサイズ
 	 */
 	private static final Integer PAGE_SIZE = 12;
@@ -91,9 +96,11 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 								item.getDistrict(), item.getPopulation(), item.getLanguage()))
 						.toList();
 				if (pageMax >= sort) {
-					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum, PAGE_SIZE);
+					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum, PAGE_SIZE,
+							NAVIGATATION_PAGES);
 				}
-				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum, PAGE_SIZE);
+				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum, PAGE_SIZE,
+						NAVIGATATION_PAGES);
 			}
 			if (hankakuKeyword.startsWith("max(pop)")) {
 				final int indexOf = hankakuKeyword.indexOf(")");
@@ -106,9 +113,11 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 								item.getDistrict(), item.getPopulation(), item.getLanguage()))
 						.toList();
 				if (pageMax >= sort) {
-					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum, PAGE_SIZE);
+					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum, PAGE_SIZE,
+							NAVIGATATION_PAGES);
 				}
-				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum, PAGE_SIZE);
+				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum, PAGE_SIZE,
+						NAVIGATATION_PAGES);
 			}
 			// ページング検索；
 			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
@@ -120,7 +129,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 								item.getDistrict(), item.getPopulation(), item.getLanguage()))
 						.toList();
-				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, PAGE_SIZE);
+				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATATION_PAGES);
 			}
 			cityView.setName(hankakuKeyword);
 			final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name",
@@ -131,7 +140,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 					.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 							item.getDistrict(), item.getPopulation(), item.getLanguage()))
 					.toList();
-			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE);
+			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATATION_PAGES);
 		}
 		// ページング検索；
 		final Page<CityView> pages = this.cityViewRepository.findAll(pageRequest);
@@ -139,7 +148,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 						item.getDistrict(), item.getPopulation(), item.getLanguage()))
 				.toList();
-		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum, PAGE_SIZE);
+		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATATION_PAGES);
 	}
 
 	@Override
