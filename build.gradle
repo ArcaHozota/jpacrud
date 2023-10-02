@@ -14,15 +14,16 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.spring.io/libs-spring-framework-build" }
-    maven { url "https://repo.spring.io/plugins-release" }
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-tasks.withType(Javadoc) {
+tasks.withType(Javadoc).configureEach {
     options.encoding = 'UTF-8'
 }
 
