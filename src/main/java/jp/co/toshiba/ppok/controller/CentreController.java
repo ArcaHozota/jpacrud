@@ -39,6 +39,36 @@ public class CentreController {
 	private final CentreLogicService centreLogicService;
 
 	/**
+	 * 都市名を重複するかどうかを確認する
+	 *
+	 * @param cityName 都市名
+	 * @return RestMsg.success()
+	 */
+	@GetMapping(value = "/checklist")
+	public RestMsg checkCityName(@RequestParam("cityName") final String cityName) {
+		if (!cityName.matches(Messages.MSG006)) {
+			return RestMsg.failure().add("validatedMsg", Messages.MSG005);
+		}
+		final List<City> duplicatedNames = this.centreLogicService.checkDuplicatedNames(cityName);
+		if (!duplicatedNames.isEmpty()) {
+			return RestMsg.failure().add("validatedMsg", Messages.MSG004);
+		}
+		return RestMsg.success();
+	}
+
+	/**
+	 * 都市IDによって都市情報を削除する(論理削除)
+	 *
+	 * @param id 都市ID
+	 * @return RestMsg.success()
+	 */
+	@DeleteMapping(value = "/city/{id}")
+	public RestMsg deleteCityDto(@PathVariable("id") final Long id) {
+		this.centreLogicService.removeById(id);
+		return RestMsg.success();
+	}
+
+	/**
 	 * 都市情報をページング検索する
 	 *
 	 * @return page(JSON)
@@ -63,57 +93,14 @@ public class CentreController {
 	}
 
 	/**
-	 * 都市情報を保存する
+	 * 国名によって公用語を取得する
 	 *
-	 * @param cityDto 都市情報DTO
-	 * @return RestMsg.success()
+	 * @return RestMsg.success().add(data)
 	 */
-	@PostMapping(value = "/city")
-	public RestMsg saveCityInfo(@RequestBody final CityDto cityDto) {
-		this.centreLogicService.saveById(cityDto);
-		return RestMsg.success();
-	}
-
-	/**
-	 * 都市情報を更新する
-	 *
-	 * @param cityDto 都市情報DTO
-	 * @return RestMsg.success()
-	 */
-	@PutMapping(value = "/city/{id}")
-	public RestMsg updateCityDto(@RequestBody final CityDto cityDto) {
-		this.centreLogicService.updateById(cityDto);
-		return RestMsg.success();
-	}
-
-	/**
-	 * 都市IDによって都市情報を削除する(論理削除)
-	 *
-	 * @param id 都市ID
-	 * @return RestMsg.success()
-	 */
-	@DeleteMapping(value = "/city/{id}")
-	public RestMsg deleteCityDto(@PathVariable("id") final Long id) {
-		this.centreLogicService.removeById(id);
-		return RestMsg.success();
-	}
-
-	/**
-	 * 都市名を重複するかどうかを確認する
-	 *
-	 * @param cityName 都市名
-	 * @return RestMsg.success()
-	 */
-	@GetMapping(value = "/checklist")
-	public RestMsg checkCityName(@RequestParam("cityName") final String cityName) {
-		if (!cityName.matches(Messages.MSG006)) {
-			return RestMsg.failure().add("validatedMsg", Messages.MSG005);
-		}
-		final List<City> duplicatedNames = this.centreLogicService.checkDuplicatedNames(cityName);
-		if (!duplicatedNames.isEmpty()) {
-			return RestMsg.failure().add("validatedMsg", Messages.MSG004);
-		}
-		return RestMsg.success();
+	@GetMapping(value = "/language")
+	public RestMsg getLanguages(@RequestParam("nationVal") final String nation) {
+		final String language = this.centreLogicService.findLanguageByCty(nation);
+		return RestMsg.success().add("languages", language);
 	}
 
 	/**
@@ -150,13 +137,26 @@ public class CentreController {
 	}
 
 	/**
-	 * 国名によって公用語を取得する
+	 * 都市情報を保存する
 	 *
-	 * @return RestMsg.success().add(data)
+	 * @param cityDto 都市情報DTO
+	 * @return RestMsg.success()
 	 */
-	@GetMapping(value = "/language")
-	public RestMsg getLanguages(@RequestParam("nationVal") final String nation) {
-		final String language = this.centreLogicService.findLanguageByCty(nation);
-		return RestMsg.success().add("languages", language);
+	@PostMapping(value = "/city")
+	public RestMsg saveCityInfo(@RequestBody final CityDto cityDto) {
+		this.centreLogicService.saveById(cityDto);
+		return RestMsg.success();
+	}
+
+	/**
+	 * 都市情報を更新する
+	 *
+	 * @param cityDto 都市情報DTO
+	 * @return RestMsg.success()
+	 */
+	@PutMapping(value = "/city/{id}")
+	public RestMsg updateCityDto(@RequestBody final CityDto cityDto) {
+		this.centreLogicService.updateById(cityDto);
+		return RestMsg.success();
 	}
 }
