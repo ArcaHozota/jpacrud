@@ -14,6 +14,53 @@ import jp.co.toshiba.ppok.utils.Pagination;
 public interface CentreLogicService {
 
 	/**
+	 * 入力した都市名の重複するかどうかを検証する
+	 *
+	 * @param cityName 都市名
+	 * @return List<City>
+	 */
+	List<City> checkDuplicatedNames(String cityName);
+
+	/**
+	 * 大陸情報を取得する
+	 *
+	 * @return List<String>
+	 */
+	List<String> findAllContinents();
+
+	/**
+	 * 指定された国の公用語を取得する
+	 *
+	 * @param nationVal 国名
+	 * @return List<String>
+	 */
+	String findLanguageByCty(String nationVal);
+
+	/**
+	 * 都市IDによって国家名を抽出する
+	 *
+	 * @param id 都市ID
+	 * @return List<String>
+	 */
+	List<String> findNationsByCityId(Long id);
+
+	/**
+	 * 指定された大陸に位置するすべての国を取得する
+	 *
+	 * @param continentVal 大陸名称
+	 * @return List<String>
+	 */
+	List<String> findNationsByCnt(String continentVal);
+
+	/**
+	 * 都市IDによって情報を抽出する
+	 *
+	 * @param id 都市ID
+	 * @return CityInfoDto
+	 */
+	CityDto getCityInfoById(Long id);
+
+	/**
 	 * パージング情報を抽出する
 	 *
 	 * @param pageNum ページングナンバー
@@ -23,12 +70,11 @@ public interface CentreLogicService {
 	Pagination<CityDto> getPageInfo(Integer pageNum, String keyword);
 
 	/**
-	 * 都市IDによって情報を抽出する
+	 * 都市IDによって情報を削除する
 	 *
 	 * @param id 都市ID
-	 * @return CityInfoDto
 	 */
-	CityDto getCityInfoById(Long id);
+	void removeById(Long id);
 
 	/**
 	 * 入力した都市情報を保存する
@@ -43,50 +89,4 @@ public interface CentreLogicService {
 	 * @param cityDto 都市情報
 	 */
 	void updateById(CityDto cityDto);
-
-	/**
-	 * 都市IDによって情報を削除する
-	 *
-	 * @param id 都市ID
-	 */
-	void removeById(Long id);
-
-	/**
-	 * 大陸情報を取得する
-	 *
-	 * @return List<String>
-	 */
-	List<String> findAllContinents();
-
-	/**
-	 * 指定された大陸に位置するすべての国を取得する
-	 *
-	 * @param continentVal 大陸名称
-	 * @return List<String>
-	 */
-	List<String> findNationsByCnt(String continentVal);
-
-	/**
-	 * 都市IDによって国家名を抽出する
-	 *
-	 * @param id 都市ID
-	 * @return List<String>
-	 */
-	List<String> findNationsByCityId(Long id);
-
-	/**
-	 * 指定された国の公用語を取得する
-	 *
-	 * @param nationVal 国名
-	 * @return List<String>
-	 */
-	String findLanguageByCty(String nationVal);
-
-	/**
-	 * 入力した都市名の重複するかどうかを検証する
-	 *
-	 * @param cityName 都市名
-	 * @return List<City>
-	 */
-	List<City> checkDuplicatedNames(String cityName);
 }

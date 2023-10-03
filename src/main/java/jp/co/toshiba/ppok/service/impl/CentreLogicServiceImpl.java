@@ -66,89 +66,22 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	private final CountryRepository countryRepository;
 
 	@Override
-	public CityDto getCityInfoById(final Long id) {
-		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
-		return new CityDto(cityView.getId(), cityView.getName(), cityView.getContinent(), cityView.getNation(),
-				cityView.getDistrict(), cityView.getPopulation(), cityView.getLanguage());
+	public List<City> checkDuplicatedNames(final String cityName) {
+		final City city = new City();
+		city.setName(StringUtils.toHankaku(cityName));
+		city.setDeleteFlg(Messages.MSG007);
+		final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
+		return this.cityRepository.findAll(example);
 	}
 
 	@Override
-	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
-		final int jpaPageNum = pageNum - 1;
-		// ページングコンストラクタを宣言する；
-		final PageRequest pageRequest = PageRequest.of(jpaPageNum, PAGE_SIZE, Sort.by(Direction.ASC, "id"));
-		// キーワードの属性を判断する；
-		if (StringUtils.isNotEmpty(keyword)) {
-			// エンティティを宣言する；
-			final CityView cityView = new CityView();
-			final String hankakuKeyword = StringUtils.toHankaku(keyword);
-			final int pageMin = PAGE_SIZE * jpaPageNum;
-			final int pageMax = PAGE_SIZE * pageNum;
-			int sort = SORT_NUMBER;
-			if (hankakuKeyword.startsWith("min(pop)")) {
-				final int indexOf = hankakuKeyword.indexOf(")");
-				final String keisan = hankakuKeyword.substring(indexOf + 1);
-				if (StringUtils.isNotEmpty(keisan)) {
-					sort = Integer.parseInt(keisan);
-				}
-				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream()
-						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
-								item.getDistrict(), item.getPopulation(), item.getLanguage()))
-						.toList();
-				if (pageMax >= sort) {
-					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum, PAGE_SIZE,
-							NAVIGATATION_PAGES);
-				}
-				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum, PAGE_SIZE,
-						NAVIGATATION_PAGES);
-			}
-			if (hankakuKeyword.startsWith("max(pop)")) {
-				final int indexOf = hankakuKeyword.indexOf(")");
-				final String keisan = hankakuKeyword.substring(indexOf + 1);
-				if (StringUtils.isNotEmpty(keisan)) {
-					sort = Integer.parseInt(keisan);
-				}
-				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream()
-						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
-								item.getDistrict(), item.getPopulation(), item.getLanguage()))
-						.toList();
-				if (pageMax >= sort) {
-					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum, PAGE_SIZE,
-							NAVIGATATION_PAGES);
-				}
-				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum, PAGE_SIZE,
-						NAVIGATATION_PAGES);
-			}
-			// ページング検索；
-			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
-			if (StringUtils.isNotEmpty(nationCode)) {
-				cityView.setNation(hankakuKeyword);
-				final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
-				final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
-				final List<CityDto> pagesByNation = pages.getContent().stream()
-						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
-								item.getDistrict(), item.getPopulation(), item.getLanguage()))
-						.toList();
-				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATATION_PAGES);
-			}
-			cityView.setName(hankakuKeyword);
-			final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name",
-					GenericPropertyMatchers.contains());
-			final Example<CityView> example = Example.of(cityView, matcher);
-			final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
-			final List<CityDto> pagesByName = pages.getContent().stream()
-					.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
-							item.getDistrict(), item.getPopulation(), item.getLanguage()))
-					.toList();
-			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATATION_PAGES);
-		}
-		// ページング検索；
-		final Page<CityView> pages = this.cityViewRepository.findAll(pageRequest);
-		final List<CityDto> pageInfos = pages.getContent().stream()
-				.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
-						item.getDistrict(), item.getPopulation(), item.getLanguage()))
-				.toList();
-		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATATION_PAGES);
+	public List<String> findAllContinents() {
+		return this.countryRepository.findAllContinents();
+	}
+
+	@Override
+	public String findLanguageByCty(final String nationVal) {
+		return this.cityViewRepository.getLanguage(nationVal);
 	}
 
 	@Override
@@ -164,14 +97,104 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void updateById(final CityDto cityDto) {
-		final String nationCode = this.countryRepository.findNationCode(cityDto.nation());
-		final City city = this.cityRepository.findById(cityDto.id()).orElseGet(City::new);
-		city.setName(cityDto.name());
-		city.setCountryCode(nationCode);
-		city.setDistrict(cityDto.district());
-		city.setPopulation(cityDto.population());
-		this.cityRepository.save(city);
+	public List<String> findNationsByCnt(final String continentVal) {
+		final String hankaku = StringUtils.toHankaku(continentVal);
+		return this.countryRepository.findNationsByCnt(hankaku);
+	}
+
+	@Override
+	public CityDto getCityInfoById(final Long id) {
+		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
+		return new CityDto(cityView.getId(), cityView.getName(), cityView.getContinent(), cityView.getNation(),
+				cityView.getDistrict(), cityView.getPopulation(), cityView.getLanguage());
+	}
+
+	@Override
+	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
+		final int jpaPageNum = pageNum - 1;
+		// ページングコンストラクタを宣言する；
+		final PageRequest pageRequest = PageRequest.of(jpaPageNum, CentreLogicServiceImpl.PAGE_SIZE,
+				Sort.by(Direction.ASC, "id"));
+		// キーワードの属性を判断する；
+		if (StringUtils.isNotEmpty(keyword)) {
+			// エンティティを宣言する；
+			final CityView cityView = new CityView();
+			final String hankakuKeyword = StringUtils.toHankaku(keyword);
+			final int pageMin = CentreLogicServiceImpl.PAGE_SIZE * jpaPageNum;
+			final int pageMax = CentreLogicServiceImpl.PAGE_SIZE * pageNum;
+			int sort = CentreLogicServiceImpl.SORT_NUMBER;
+			if (hankakuKeyword.startsWith("min(pop)")) {
+				final int indexOf = hankakuKeyword.indexOf(")");
+				final String keisan = hankakuKeyword.substring(indexOf + 1);
+				if (StringUtils.isNotEmpty(keisan)) {
+					sort = Integer.parseInt(keisan);
+				}
+				final List<CityDto> minimumRanks = this.cityViewRepository.findMinimumRanks(sort).stream()
+						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+								item.getDistrict(), item.getPopulation(), item.getLanguage()))
+						.toList();
+				if (pageMax >= sort) {
+					return Pagination.of(minimumRanks.subList(pageMin, sort), minimumRanks.size(), pageNum,
+							CentreLogicServiceImpl.PAGE_SIZE, CentreLogicServiceImpl.NAVIGATATION_PAGES);
+				}
+				return Pagination.of(minimumRanks.subList(pageMin, pageMax), minimumRanks.size(), pageNum,
+						CentreLogicServiceImpl.PAGE_SIZE, CentreLogicServiceImpl.NAVIGATATION_PAGES);
+			}
+			if (hankakuKeyword.startsWith("max(pop)")) {
+				final int indexOf = hankakuKeyword.indexOf(")");
+				final String keisan = hankakuKeyword.substring(indexOf + 1);
+				if (StringUtils.isNotEmpty(keisan)) {
+					sort = Integer.parseInt(keisan);
+				}
+				final List<CityDto> maximumRanks = this.cityViewRepository.findMaximumRanks(sort).stream()
+						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+								item.getDistrict(), item.getPopulation(), item.getLanguage()))
+						.toList();
+				if (pageMax >= sort) {
+					return Pagination.of(maximumRanks.subList(pageMin, sort), maximumRanks.size(), pageNum,
+							CentreLogicServiceImpl.PAGE_SIZE, CentreLogicServiceImpl.NAVIGATATION_PAGES);
+				}
+				return Pagination.of(maximumRanks.subList(pageMin, pageMax), maximumRanks.size(), pageNum,
+						CentreLogicServiceImpl.PAGE_SIZE, CentreLogicServiceImpl.NAVIGATATION_PAGES);
+			}
+			// ページング検索；
+			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
+			if (StringUtils.isNotEmpty(nationCode)) {
+				cityView.setNation(hankakuKeyword);
+				final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
+				final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
+				final List<CityDto> pagesByNation = pages.getContent().stream()
+						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+								item.getDistrict(), item.getPopulation(), item.getLanguage()))
+						.toList();
+				return Pagination.of(pagesByNation, pages.getTotalElements(), pageNum, CentreLogicServiceImpl.PAGE_SIZE,
+						CentreLogicServiceImpl.NAVIGATATION_PAGES);
+			}
+			cityView.setName(hankakuKeyword);
+			final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name",
+					GenericPropertyMatchers.contains());
+			final Example<CityView> example = Example.of(cityView, matcher);
+			final Page<CityView> pages = this.cityViewRepository.findAll(example, pageRequest);
+			final List<CityDto> pagesByName = pages.getContent().stream()
+					.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+							item.getDistrict(), item.getPopulation(), item.getLanguage()))
+					.toList();
+			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, CentreLogicServiceImpl.PAGE_SIZE,
+					CentreLogicServiceImpl.NAVIGATATION_PAGES);
+		}
+		// ページング検索；
+		final Page<CityView> pages = this.cityViewRepository.findAll(pageRequest);
+		final List<CityDto> pageInfos = pages.getContent().stream()
+				.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
+						item.getDistrict(), item.getPopulation(), item.getLanguage()))
+				.toList();
+		return Pagination.of(pageInfos, pages.getTotalElements(), pageNum, CentreLogicServiceImpl.PAGE_SIZE,
+				CentreLogicServiceImpl.NAVIGATATION_PAGES);
+	}
+
+	@Override
+	public void removeById(final Long id) {
+		this.cityRepository.removeById(id);
 	}
 
 	@Override
@@ -189,32 +212,13 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void removeById(final Long id) {
-		this.cityRepository.removeById(id);
-	}
-
-	@Override
-	public List<String> findAllContinents() {
-		return this.countryRepository.findAllContinents();
-	}
-
-	@Override
-	public List<String> findNationsByCnt(final String continentVal) {
-		final String hankaku = StringUtils.toHankaku(continentVal);
-		return this.countryRepository.findNationsByCnt(hankaku);
-	}
-
-	@Override
-	public String findLanguageByCty(final String nationVal) {
-		return this.cityViewRepository.getLanguage(nationVal);
-	}
-
-	@Override
-	public List<City> checkDuplicatedNames(final String cityName) {
-		final City city = new City();
-		city.setName(StringUtils.toHankaku(cityName));
-		city.setDeleteFlg(Messages.MSG007);
-		final Example<City> example = Example.of(city, ExampleMatcher.matchingAll());
-		return this.cityRepository.findAll(example);
+	public void updateById(final CityDto cityDto) {
+		final String nationCode = this.countryRepository.findNationCode(cityDto.nation());
+		final City city = this.cityRepository.findById(cityDto.id()).orElseGet(City::new);
+		city.setName(cityDto.name());
+		city.setCountryCode(nationCode);
+		city.setDistrict(cityDto.district());
+		city.setPopulation(cityDto.population());
+		this.cityRepository.save(city);
 	}
 }
