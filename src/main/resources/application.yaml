@@ -23,4 +23,4 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
-# DBFile is in the classpath:public/dbfile/world.sql
+# DBFiles are in the classpath:public/dbfiles/*
