@@ -406,7 +406,7 @@ function showValidationMsg(element, status, msg) {
 	$(element).next("span").text("");
 	if (status === "success") {
 		$(element).addClass("is-valid");
-		$(element).next("span").addClass("valid-feedback").text(msg);
+		$(element).next("span").addClass("valid-feedback");
 	} else if (status === "error") {
 		$(element).addClass("is-invalid");
 		$(element).next("span").addClass("invalid-feedback").text(msg);
