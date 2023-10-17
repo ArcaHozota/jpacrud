@@ -151,7 +151,7 @@ $("#cityAddModalBtn").on('click', function() {
 	formReset("#cityAddModal form");
 	getContinent("#continentInput");
 	getNations($("#nationInput"), 'Africa');
-	let addModal = new bootstrap.Modal(document.getElementById('cityAddModal'), {
+	let addModal = new bootstrap.Modal($("#cityAddModal"), {
 		backdrop: 'static'
 	});
 	addModal.show();
@@ -210,8 +210,7 @@ $("#nameInput").change(
 					showValidationMsg("#nameInput", "success", "");
 					$("#cityInfoSaveBtn").attr("ajax-va", "success");
 				} else {
-					showValidationMsg("#nameInput", "error",
-						result.extend.validatedMsg);
+					showValidationMsg("#nameInput", "error", result.extend.validatedMsg);
 					$("#cityInfoSaveBtn").attr("ajax-va", "error");
 				}
 			}
@@ -276,7 +275,7 @@ $(document).on('click', '.edit_btn', function() {
 	formReset("#cityEditModal form");
 	getCityInfo(editId);
 	$("#cityInfoChangeBtn").attr("editId", editId);
-	let editModal = new bootstrap.Modal(document.getElementById('cityEditModal'), {
+	let editModal = new bootstrap.Modal($("#cityEditModal"), {
 		backdrop: 'static'
 	});
 	editModal.show();
@@ -405,13 +404,13 @@ function formReset(element) {
 
 // モーダルフォームの入力行にステータスカラーを追加します
 function showValidationMsg(element, status, msg) {
-	$(element).parent().removeClass("has-success has-error");
-	$(element).next("span").text("");
+	$(element).parent().removeClass("is-valid is-invalid");
+	$(element).next("div").text("");
 	if (status === "success") {
-		$(element).parent().addClass("has-success");
-		$(element).next("span").text(msg);
+		$(element).parent().addClass("is-valid");
+		$(element).next("div").addClass("valid-feedback").text(msg);
 	} else if (status === "error") {
-		$(element).parent().addClass("has-error");
-		$(element).next("span").text(msg);
+		$(element).parent().addClass("is-invalid");
+		$(element).next("div").addClass("invalid-feedback").text(msg);
 	}
 }
