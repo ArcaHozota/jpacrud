@@ -149,6 +149,8 @@ $("#searchBtn").on('click', function() {
 // 入力モーダルにクリック機能を追加します
 $("#cityAddModalBtn").on('click', function() {
 	formReset("#cityAddModal form");
+	$(".form-control").removeClass("is-valid is-invalid");
+	$(".form-text").removeClass("valid-feedback invalid-feedback");
 	getContinent("#continentInput");
 	getNations($("#nationInput"), 'Africa');
 	let addModal = new bootstrap.Modal($("#cityAddModal"), {
