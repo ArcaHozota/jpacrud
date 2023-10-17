@@ -247,7 +247,7 @@ $("#cityInfoSaveBtn").on('click', function() {
 		$.ajax({
 			url: pathdeApp + '/city',
 			type: 'POST',
-			contentType: 'application/json;charset=UTF-8',
+			contentType: 'application/json',
 			dataType: 'json',
 			data: JSON.stringify({
 				'name': $("#nameInput").val().trim(),
@@ -363,7 +363,7 @@ $("#cityInfoChangeBtn").on('click', function() {
 	$.ajax({
 		url: pathdeApp + '/city/' + editId,
 		type: 'PUT',
-		contentType: 'application/json;charset=UTF-8',
+		contentType: 'application/json',
 		dataType: 'json',
 		data: JSON.stringify({
 			'id': editId,
