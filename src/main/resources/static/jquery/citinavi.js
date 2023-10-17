@@ -402,13 +402,15 @@ function formReset(element) {
 
 // モーダルフォームの入力行にステータスカラーを追加します
 function showValidationMsg(element, status, msg) {
-	$(element).removeClass("is-valid is-invalid");
+	$(element).removeClass("form-control");
+	$(element).removeClass("form-control is-valid");
+	$(element).removeClass("form-control is-invalid");
 	$(element).next("span").text("");
 	if (status === "success") {
-		$(element).addClass("is-valid");
+		$(element).addClass("form-control is-valid");
 		$(element).next("span").addClass("valid-feedback");
 	} else if (status === "error") {
-		$(element).addClass("is-invalid");
+		$(element).addClass("form-control is-invalid");
 		$(element).next("span").addClass("invalid-feedback").text(msg);
 	}
 }
