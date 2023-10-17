@@ -13,7 +13,7 @@ import jp.co.toshiba.ppok.utils.Messages;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * ウェブコンフィギュレーション
+ * SpringMVC設定クラス
  *
  * @author ArcaHozota
  * @since 1.08
