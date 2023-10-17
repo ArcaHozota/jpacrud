@@ -151,6 +151,7 @@ $("#cityAddModalBtn").on('click', function() {
 	formReset("#cityAddModal form");
 	$(".form-control").removeClass("is-valid is-invalid");
 	$(".form-text").removeClass("valid-feedback invalid-feedback");
+	$(".form-text").text("");
 	getContinent("#continentInput");
 	getNations($("#nationInput"), 'Africa');
 	let addModal = new bootstrap.Modal($("#cityAddModal"), {
@@ -273,6 +274,9 @@ $("#cityInfoSaveBtn").on('click', function() {
 $(document).on('click', '.edit_btn', function() {
 	let editId = $(this).attr("editId");
 	formReset("#cityEditModal form");
+	$(".form-control").removeClass("is-valid is-invalid");
+	$(".form-text").removeClass("valid-feedback invalid-feedback");
+	$(".form-text").text("");
 	getCityInfo(editId);
 	$("#cityInfoChangeBtn").attr("editId", editId);
 	let editModal = new bootstrap.Modal($("#cityEditModal"), {
