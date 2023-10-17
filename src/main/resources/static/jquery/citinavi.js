@@ -4,12 +4,12 @@ let totalRecord, totalPages, currentPage;
 
 let searchName;
 
-// ページの読み込み後、ajaxリクエストを送信してページ情報を取得します
+// ページの読み込み後、ajaxリクエストを送信してページ情報を取得する
 $(document).ready(function() {
 	toSelectedPg(1, searchName);
 });
 
-// クリックしたページ番号に転送します
+// クリックしたページ番号に転送する
 function toSelectedPg(pageNum, searchName) {
 	$.ajax({
 		url: pathdeApp + '/city',
@@ -26,7 +26,7 @@ function toSelectedPg(pageNum, searchName) {
 	})
 }
 
-// データを分析して表示します
+// データを分析して表示する
 function buildCityTable(result) {
 	// 元のテーブルを空にする
 	$("#cityTableBody").empty();
@@ -77,7 +77,7 @@ function buildCityTable(result) {
 	});
 }
 
-// ページ情報を分析して表示します
+// ページ情報を分析して表示する
 function buildPageInfos(result) {
 	let pageInfos = $("#pageInfos");
 	pageInfos.empty();
@@ -88,7 +88,7 @@ function buildPageInfos(result) {
 		+ " pages, " + totalRecord + " records found.");
 }
 
-// ナビゲートされたページを分析して表示します
+// ナビゲートされたページを分析して表示する
 function buildPageNavi(result) {
 	$("#pageNavi").empty();
 	let ul = $("<ul></ul>").addClass("pagination");
@@ -140,13 +140,13 @@ function buildPageNavi(result) {
 	navElement.appendTo("#pageNavi");
 }
 
-// 検索ボタンのクリック機能を追加します
+// 検索ボタンのクリック機能を追加する
 $("#searchBtn").on('click', function() {
 	searchName = $("#keywordInput").val().trim().toString();
 	toSelectedPg(1, searchName);
 });
 
-// 入力モーダルにクリック機能を追加します
+// 入力モーダルにクリック機能を追加する
 $("#cityAddModalBtn").on('click', function() {
 	formReset("#cityAddModal form");
 	$(".form-control").removeClass("is-valid is-invalid");
@@ -161,13 +161,13 @@ $("#cityAddModalBtn").on('click', function() {
 });
 
 
-// 大陸選択にクリック機能を追加します
+// 大陸選択にクリック機能を追加する
 $("#continentInput").on('change', function() {
 	let continentVal = $("#continentInput option:selected").val();
 	getNations($("#nationInput"), continentVal);
 })
 
-// 大陸の名称を取得します
+// 大陸の名称を取得する
 function getContinent(element) {
 	$(element).empty();
 	$.ajax({
@@ -183,7 +183,7 @@ function getContinent(element) {
 	});
 }
 
-// 国の名称を取得します
+// 国の名称を取得する
 function getNations(element, continentVal) {
 	$(element).empty();
 	$.ajax({
@@ -199,7 +199,7 @@ function getNations(element, continentVal) {
 	});
 }
 
-// 入力された名前が重複していないかを分析します
+// 入力された名前が重複していないかを分析する
 $("#nameInput").change(
 	function() {
 		let cityName = this.value;
@@ -219,7 +219,7 @@ $("#nameInput").change(
 		});
 	});
 
-// クリックして保存し、入力データ形式を確認します
+// クリックして保存し、入力データ形式を確認する
 $("#cityInfoSaveBtn").on('click', function() {
 	let inputDistrict = $("#districtInput").val().trim();
 	let inputPopulation = $("#populationInput").val().trim();
@@ -270,7 +270,7 @@ $("#cityInfoSaveBtn").on('click', function() {
 	}
 });
 
-// 編集モーダルにクリック機能を追加します
+// 編集モーダルにクリック機能を追加する
 $(document).on('click', '.edit_btn', function() {
 	let editId = $(this).attr("editId");
 	formReset("#cityEditModal form");
@@ -285,7 +285,7 @@ $(document).on('click', '.edit_btn', function() {
 	editModal.show();
 });
 
-// 選択した都市情報を取得します
+// 選択した都市情報を取得する
 function getCityInfo(id) {
 	$.ajax({
 		url: pathdeApp + '/city/' + id,
@@ -303,7 +303,7 @@ function getCityInfo(id) {
 	});
 }
 
-// 都市IDによって国の名称を取得します
+// 都市IDによって国の名称を取得する
 function getNationsById(element, id) {
 	$(element).empty();
 	$.ajax({
@@ -318,13 +318,13 @@ function getNationsById(element, id) {
 	});
 }
 
-// 国のセレクターにクリック機能を追加します
+// 国のセレクターにクリック機能を追加する
 $("#nationEdit").on('change', function() {
 	let nationVal = $("#nationEdit option:selected").val();
 	getLanguage($("#languageEdit"), nationVal);
 })
 
-// 言語の名称を取得します
+// 言語の名称を取得する
 function getLanguage(element, nationVal) {
 	$(element).empty();
 	$.ajax({
@@ -337,7 +337,7 @@ function getLanguage(element, nationVal) {
 	});
 }
 
-// 都市情報の変更を送信します
+// 都市情報の変更を送信する
 $("#cityInfoChangeBtn").on('click', function() {
 	let inputDistrict = $("#districtEdit").val().trim();
 	let inputPopulation = $("#populationEdit").val().trim();
@@ -384,7 +384,7 @@ $("#cityInfoChangeBtn").on('click', function() {
 	});
 });
 
-// 削除ボタンにクリック機能を追加します
+// 削除ボタンにクリック機能を追加する
 $(document).on('click', '.delete_btn', function() {
 	let cityName = $(this).parents("tr").find("td:eq(0)").text().trim();
 	let cityId = $(this).attr("deleteId");
@@ -406,7 +406,7 @@ function formReset(element) {
 	$(element).find(".help-block").text("");
 }
 
-// モーダルフォームの入力行にステータスカラーを追加します
+// モーダルフォームの入力行にステータスカラーを追加する
 function showValidationMsg(element, status, msg) {
 	$(element).removeClass("is-valid is-invalid");
 	$(element).next("span").removeClass("valid-feedback invalid-feedback");
