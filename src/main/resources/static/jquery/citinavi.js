@@ -189,8 +189,7 @@ function getNations(element, continentVal) {
 		type: 'GET',
 		success: function(result) {
 			$.each(result.extend.nations, function() {
-				let optionElement = $("<option></option>").append(this).attr(
-					"value", this);
+				let optionElement = $("<option></option>").append(this).attr("value", this);
 				optionElement.appendTo(element);
 			});
 		}
@@ -259,7 +258,6 @@ $("#cityInfoSaveBtn").on('click', function() {
 			success: function(result) {
 				if (result.code === 200) {
 					$("#cityAddModal").modal('hide');
-					// To last page.
 					toSelectedPg(totalPages, searchName);
 				} else if (undefined !== result.extend.errorFields.name) {
 					showValidationMsg("#nameInput", "error", result.extend.errorFields.name);
@@ -405,12 +403,12 @@ function formReset(element) {
 // モーダルフォームの入力行にステータスカラーを追加します
 function showValidationMsg(element, status, msg) {
 	$(element).parent().removeClass("is-valid is-invalid");
-	$(element).next("div").text("");
+	$(element).next("span").text("");
 	if (status === "success") {
 		$(element).parent().addClass("is-valid");
-		$(element).next("div").addClass("valid-feedback").text(msg);
+		$(element).next("span").addClass("valid-feedback").text(msg);
 	} else if (status === "error") {
 		$(element).parent().addClass("is-invalid");
-		$(element).next("div").addClass("invalid-feedback").text(msg);
+		$(element).next("span").addClass("invalid-feedback").text(msg);
 	}
 }
