@@ -1,12 +1,10 @@
-const pathdeApp = "sshcrud";
-
-let totalRecord, totalPages, currentPage;
-
-let searchName;
+const pathdeApp = "ssmcrud";
+let currentPage = 1;
+let totalRecord, totalPages, searchName;
 
 // ページの読み込み後、ajaxリクエストを送信してページ情報を取得する
 $(document).ready(function() {
-	toSelectedPg(1, searchName);
+	toSelectedPg(currentPage, searchName);
 });
 
 // クリックしたページ番号に転送する
@@ -292,22 +290,7 @@ function getCityInfo(id) {
 			$("#languageEdit").text(cityData.language);
 			$("#districtEdit").val(cityData.district);
 			$("#populationEdit").val(cityData.population);
-			getNationsById("#nationEdit", id);
-		}
-	});
-}
-
-// 都市IDによって国の名称を取得する
-function getNationsById(element, id) {
-	$(element).empty();
-	$.ajax({
-		url: pathdeApp + '/countries/' + id,
-		type: 'GET',
-		success: function(result) {
-			$.each(result.extend.nationsByName, function() {
-				let optionElement = $("<option></option>").append(this).attr("value", this);
-				optionElement.appendTo(element);
-			});
+			getNations("#nationEdit", id);
 		}
 	});
 }
