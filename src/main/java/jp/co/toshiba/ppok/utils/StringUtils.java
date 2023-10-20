@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.lang.Nullable;
 
@@ -16,8 +17,8 @@ import lombok.NoArgsConstructor;
 /**
  * 共通ストリング判断ツール
  *
- * @author Administrator
- * @since 2023-07-11
+ * @author ArkamaHozota
+ * @since 1.09
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringUtils {
@@ -227,6 +228,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * ある文字列はすべて数字であるかどうかを判断する
+	 *
+	 * @param string ストリング
+	 * @return true: すべて数字, false: 文字も含める
+	 */
+	public static boolean isDigital(@Nullable final String string) {
+		return Pattern.compile("\\d*").matcher(string).matches();
+	}
+
+	/**
 	 * 当ストリングは空かどうかを判断する
 	 *
 	 * @param str ストリング
@@ -244,15 +255,13 @@ public final class StringUtils {
 	 * @return true: イコール, false: イコールしない
 	 */
 	public static boolean isEqual(@Nullable final String str1, @Nullable final String str2) {
-		final boolean isEqual;
 		if ((str1 == null) && (str2 == null)) {
 			return true;
 		}
 		if ((str1 == null) || (str2 == null) || (str1.length() != str2.length())) {
 			return false;
 		}
-		isEqual = str1.trim().equals(str2.trim());
-		return isEqual;
+		return str1.trim().equals(str2.trim());
 	}
 
 	/**

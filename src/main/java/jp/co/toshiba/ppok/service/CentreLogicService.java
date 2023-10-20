@@ -37,17 +37,9 @@ public interface CentreLogicService {
 	String findLanguageByCty(String nationVal);
 
 	/**
-	 * 都市IDによって国家名を抽出する
-	 *
-	 * @param id 都市ID
-	 * @return List<String>
-	 */
-	List<String> findNationsByCityId(Long id);
-
-	/**
 	 * 指定された大陸に位置するすべての国を取得する
 	 *
-	 * @param continentVal 大陸名称
+	 * @param continentVal 大陸名称或いは都市ID
 	 * @return List<String>
 	 */
 	List<String> findNationsByCnt(String continentVal);

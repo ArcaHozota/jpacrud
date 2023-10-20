@@ -126,17 +126,6 @@ public class CentreController {
 	}
 
 	/**
-	 * 選択された都市の大陸によってすべての国を検索する
-	 *
-	 * @return RestMsg.success().add(data)
-	 */
-	@GetMapping(value = "/countries/{id}")
-	public RestMsg getListOfNationsById(@PathVariable("id") final Long id) {
-		final List<String> nationList = this.centreLogicService.findNationsByCityId(id);
-		return RestMsg.success().add("nationsByName", nationList);
-	}
-
-	/**
 	 * 都市情報を保存する
 	 *
 	 * @param cityDto 都市情報DTO

@@ -85,21 +85,20 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public List<String> findNationsByCityId(final Long id) {
-		final List<String> list = Lists.newArrayList();
-		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
-		final String nationName = cityView.getNation();
-		list.add(nationName);
-		final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
-		final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName)).toList();
-		list.addAll(collect);
-		return list;
-	}
-
-	@Override
 	public List<String> findNationsByCnt(final String continentVal) {
-		final String hankaku = StringUtils.toHankaku(continentVal);
-		return this.countryRepository.findNationsByCnt(hankaku);
+		if (StringUtils.isDigital(continentVal)) {
+			final Long id = Long.parseLong(continentVal);
+			final List<String> list = Lists.newArrayList();
+			final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
+			final String nationName = cityView.getNation();
+			list.add(nationName);
+			final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
+			final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName))
+					.toList();
+			list.addAll(collect);
+			return list;
+		}
+		return this.countryRepository.findNationsByCnt(continentVal);
 	}
 
 	@Override
