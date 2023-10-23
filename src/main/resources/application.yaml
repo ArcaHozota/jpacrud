@@ -16,7 +16,6 @@ spring:
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    database: ORACLE
     show-sql: true
     open-in-view: false
   output:
