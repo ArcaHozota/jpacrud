@@ -1,6 +1,6 @@
-const pathdeApp = "ssmcrud";
+const pathdeApp = "sshcrud";
 let currentPage = 1;
-let totalRecord, totalPages, searchName;
+let totalRecords, totalPages, searchName;
 
 // ページの読み込み後、ajaxリクエストを送信してページ情報を取得する
 $(document).ready(function() {
@@ -81,9 +81,9 @@ function buildPageInfos(result) {
 	pageInfos.empty();
 	currentPage = result.extend.pageInfo.pageNum;
 	totalPages = result.extend.pageInfo.totalPages;
-	totalRecord = result.extend.pageInfo.totalRecords;
+	totalRecords = result.extend.pageInfo.totalRecords;
 	pageInfos.append("The " + currentPage + " page in " + totalPages
-		+ " pages, " + totalRecord + " records found.");
+		+ " pages, " + totalRecords + " records found.");
 }
 
 // ナビゲートされたページを分析して表示する
