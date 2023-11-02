@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @IdClass(LanguageId.class)
-@Table(name = "WORLD_LANGUAGE")
+@Table(name = "language")
 public final class Language implements Serializable {
 
 	private static final long serialVersionUID = -2909406519851156194L;
@@ -39,8 +39,7 @@ public final class Language implements Serializable {
 	 * This field corresponds to the database column LANGUAGE
 	 */
 	@Id
-	@Column(name = "LANGUAGE")
-	private String name;
+	private String language;
 
 	/**
 	 * This field corresponds to the database column IS_OFFICIAL

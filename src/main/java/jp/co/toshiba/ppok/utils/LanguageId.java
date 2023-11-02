@@ -24,5 +24,5 @@ public class LanguageId implements Serializable {
 	/**
 	 * This field corresponds to the database column LANGUAGE
 	 */
-	private String name;
+	private String language;
 }
