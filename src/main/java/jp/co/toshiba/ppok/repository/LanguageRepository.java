@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import jp.co.toshiba.ppok.entity.Language;
-import jp.co.toshiba.ppok.utils.LanguageId;
 
 /**
  * 言語リポジトリ
@@ -15,7 +14,7 @@ import jp.co.toshiba.ppok.utils.LanguageId;
  * @author Administrator
  */
 @Repository
-public interface LanguageRepository extends JpaRepository<Language, LanguageId>, JpaSpecificationExecutor<Language> {
+public interface LanguageRepository extends JpaRepository<Language, String>, JpaSpecificationExecutor<Language> {
 
 	/**
 	 * 国名によって公用語を取得する
