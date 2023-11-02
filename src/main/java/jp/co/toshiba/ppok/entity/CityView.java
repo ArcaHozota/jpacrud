@@ -30,7 +30,7 @@ public final class CityView implements Serializable {
 	 * This field corresponds to the database column ID
 	 */
 	@Id
-	private Long id;
+	private Integer id;
 
 	/**
 	 * This field corresponds to the database column NAME
@@ -60,7 +60,7 @@ public final class CityView implements Serializable {
 	 * This field corresponds to the database column POPULATION
 	 */
 	@Column(nullable = false)
-	private Long population;
+	private Integer population;
 
 	/**
 	 * This field corresponds to the database column LANGUAGE
