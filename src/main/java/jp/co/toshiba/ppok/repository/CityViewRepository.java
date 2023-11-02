@@ -19,28 +19,28 @@ import jp.co.toshiba.ppok.entity.CityView;
 public interface CityViewRepository extends JpaRepository<CityView, Long>, JpaSpecificationExecutor<CityView> {
 
 	/**
-	 * 国名によって公用語を取得する
+	 * 人口数量降順で都市情報を検索する
 	 *
-	 * @param nationVal 国名
-	 * @return String
+	 * @return List<CityView>
 	 */
-	String getLanguage(@Param("nation") String nationVal);
+	@Query(value = "select cv.id, cv.name, cv.continent, cv.nation, cv.district, cv.population, cv.language "
+			+ "from city_info as cv order by cv.population desc limit :sortNumber", nativeQuery = true)
+	List<CityView> findMaximumRanks(@Param("sortNumber") Integer sort);
 
 	/**
 	 * 人口数量昇順で都市情報を検索する
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION, WCV.LANGUAGE "
-			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
+	@Query(value = "select cv.id, cv.name, cv.continent, cv.nation, cv.district, cv.population, cv.language "
+			+ "from city_info as cv order by cv.population asc limit :sortNumber", nativeQuery = true)
 	List<CityView> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
-	 * 人口数量降順で都市情報を検索する
+	 * 国名によって公用語を取得する
 	 *
-	 * @return List<CityView>
+	 * @param nationVal 国名
+	 * @return String
 	 */
-	@Query(value = "SELECT WCV.ID, WCV.CONTINENT, WCV.NATION, WCV.NAME, WCV.DISTRICT, WCV.POPULATION, WCV.LANGUAGE "
-			+ "FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION DESC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
-	List<CityView> findMaximumRanks(@Param("sortNumber") Integer sort);
+	String getLanguage(@Param("nation") String nationVal);
 }
