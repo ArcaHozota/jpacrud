@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "WORLD_COUNTRY")
+@Table(name = "country")
 @NamedQuery(name = "Country.findNationCode", query = "select cty.code from Country as cty where cty.deleteFlg = 'visible' and cty.name =:name")
 @NamedQuery(name = "Country.findAllContinents", query = "select max(cty.continent) from Country as cty where cty.deleteFlg = 'visible' group by cty.continent order by cty.continent asc")
 @NamedQuery(name = "Country.findNationsByCnt", query = "select max(cty.name) from Country as cty where cty.deleteFlg = 'visible' and cty.continent =:continent group by cty.name order by cty.name asc")
