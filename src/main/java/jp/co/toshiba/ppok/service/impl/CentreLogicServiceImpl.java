@@ -87,7 +87,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	@Override
 	public List<String> findNationsByCnt(final String continentVal) {
 		if (StringUtils.isDigital(continentVal)) {
-			final Long id = Long.parseLong(continentVal);
+			final Integer id = Integer.parseInt(continentVal);
 			final List<String> list = Lists.newArrayList();
 			final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 			final String nationName = cityView.getNation();
@@ -102,7 +102,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public CityDto getCityInfoById(final Long id) {
+	public CityDto getCityInfoById(final Integer id) {
 		final CityView cityView = this.cityViewRepository.findById(id).orElseGet(CityView::new);
 		return new CityDto(cityView.getId(), cityView.getName(), cityView.getContinent(), cityView.getNation(),
 				cityView.getDistrict(), cityView.getPopulation(), cityView.getLanguage());
@@ -192,14 +192,14 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void removeById(final Long id) {
+	public void removeById(final Integer id) {
 		this.cityRepository.removeById(id);
 	}
 
 	@Override
 	public void saveById(final CityDto cityDto) {
 		final String nationCode = this.countryRepository.findNationCode(cityDto.nation());
-		final Long saiban = this.cityRepository.saiban();
+		final Integer saiban = this.cityRepository.saiban();
 		final City city = new City();
 		city.setId(saiban);
 		city.setName(cityDto.name());

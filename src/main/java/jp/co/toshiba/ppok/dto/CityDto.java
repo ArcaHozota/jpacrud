@@ -6,6 +6,6 @@ package jp.co.toshiba.ppok.dto;
  * @author ArcaHozota
  * @since 1.07
  */
-public record CityDto(Long id, String name, String continent, String nation, String district, Long population,
+public record CityDto(Integer id, String name, String continent, String nation, String district, Integer population,
 		String language) {
 }

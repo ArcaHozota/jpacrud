@@ -16,7 +16,7 @@ import jp.co.toshiba.ppok.entity.City;
  * @author Administrator
  */
 @Repository
-public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificationExecutor<City> {
+public interface CityRepository extends JpaRepository<City, Integer>, JpaSpecificationExecutor<City> {
 
 	/**
 	 * 論理削除
@@ -25,12 +25,12 @@ public interface CityRepository extends JpaRepository<City, Long>, JpaSpecificat
 	 */
 	@Modifying
 	@Transactional(rollbackFor = PSQLException.class)
-	void removeById(@Param("id") Long id);
+	void removeById(@Param("id") Integer id);
 
 	/**
 	 * 採番を行います
 	 *
 	 * @return 採番値
 	 */
-	Long saiban();
+	Integer saiban();
 }

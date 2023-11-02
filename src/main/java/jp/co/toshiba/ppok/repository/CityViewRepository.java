@@ -16,7 +16,7 @@ import jp.co.toshiba.ppok.entity.CityView;
  * @author Administrator
  */
 @Repository
-public interface CityViewRepository extends JpaRepository<CityView, Long>, JpaSpecificationExecutor<CityView> {
+public interface CityViewRepository extends JpaRepository<CityView, Integer>, JpaSpecificationExecutor<CityView> {
 
 	/**
 	 * 人口数量降順で都市情報を検索する

@@ -50,7 +50,7 @@ public interface CentreLogicService {
 	 * @param id 都市ID
 	 * @return CityInfoDto
 	 */
-	CityDto getCityInfoById(Long id);
+	CityDto getCityInfoById(Integer id);
 
 	/**
 	 * パージング情報を抽出する
@@ -66,7 +66,7 @@ public interface CentreLogicService {
 	 *
 	 * @param id 都市ID
 	 */
-	void removeById(Long id);
+	void removeById(Integer id);
 
 	/**
 	 * 入力した都市情報を保存する
