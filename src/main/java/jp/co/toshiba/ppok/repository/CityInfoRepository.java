@@ -2,10 +2,13 @@ package jp.co.toshiba.ppok.repository;
 
 import java.util.List;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.toshiba.ppok.entity.CityInfo;
 
@@ -41,4 +44,12 @@ public interface CityInfoRepository extends JpaRepository<CityInfo, Integer>, Jp
 	 * @return String
 	 */
 	String getLanguage(@Param("nation") String nationVal);
+
+	/**
+	 * リフレッシュ
+	 */
+	@Modifying
+	@Transactional(rollbackFor = PSQLException.class)
+	@Query(value = "refresh materialized view city_info", nativeQuery = true)
+	void refresh();
 }
