@@ -19,6 +19,7 @@ import jp.co.toshiba.ppok.entity.CityView;
 import jp.co.toshiba.ppok.repository.CityRepository;
 import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
+import jp.co.toshiba.ppok.utils.CommonException;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
 import jp.co.toshiba.ppok.utils.SecondBeanUtils;
@@ -211,7 +212,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	@Override
 	public void updateById(final CityDto cityDto) {
 		final City city = this.cityRepository.findById(cityDto.id()).orElseThrow(() -> {
-			throw new RuntimeException("システムエラー");
+			throw new CommonException(Messages.MSG009);
 		});
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		final String countryCode = this.getCountryCode(cityDto.nation());

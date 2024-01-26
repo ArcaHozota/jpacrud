@@ -27,4 +27,6 @@ public final class Messages {
 	public static final String MSG007 = "visible";
 
 	public static final String MSG008 = "removed";
+
+	public static final String MSG009 = "システムエラー";
 }
