@@ -91,9 +91,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			list.add(nationName);
 			final List<String> nations = this.cityViewRepository.findNationsByCnt(cityView.getContinent());
 			final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName))
-					.toList();
+					.sorted(Comparator.naturalOrder()).toList();
 			list.addAll(collect);
-			return list.stream().sorted(Comparator.naturalOrder()).toList();
+			return list;
 		}
 		return this.cityViewRepository.findNationsByCnt(continentVal).stream().sorted(Comparator.naturalOrder())
 				.toList();
