@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "WORLD_CITY_VIEW")
 @NamedQuery(name = "CityView.countByNations", query = "select count(1) from CityView as cv where cv.nation like :nation")
 @NamedQuery(name = "CityView.findContinents", query = "select cv.continent from CityView as cv group by cv.continent")
