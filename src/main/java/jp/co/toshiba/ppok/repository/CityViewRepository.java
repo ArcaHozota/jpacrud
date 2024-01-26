@@ -12,9 +12,25 @@ import jp.co.toshiba.ppok.entity.CityView;
 /**
  * 都市情報リポジトリ
  *
- * @author Administrator
+ * @author ArkamaHozota
+ * @since 1.04
  */
 public interface CityViewRepository extends JpaRepository<CityView, Integer>, JpaSpecificationExecutor<CityView> {
+
+	/**
+	 * 国名によって情報の数を取得する
+	 *
+	 * @param nation 国名
+	 * @return Integer
+	 */
+	Integer countByNations(@Param("nation") String nation);
+
+	/**
+	 * すべての大陸名称を取得する
+	 *
+	 * @return List<String>
+	 */
+	List<String> findContinents();
 
 	/**
 	 * 人口数量降順で都市情報を検索する
@@ -33,6 +49,14 @@ public interface CityViewRepository extends JpaRepository<CityView, Integer>, Jp
 	@Query(value = "select cv.id, cv.name, cv.continent, cv.nation, cv.district, cv.population, cv.language "
 			+ "from city_info as cv order by cv.population asc limit :sortNumber", nativeQuery = true)
 	List<CityView> findMinimumRanks(@Param("sortNumber") Integer sort);
+
+	/**
+	 * 大陸名称によってすべての国名を取得する
+	 *
+	 * @param continent 大陸名称
+	 * @return List<String>
+	 */
+	List<String> findNationsByCnt(@Param("continent") String continent);
 
 	/**
 	 * 国名によって公用語を取得する
