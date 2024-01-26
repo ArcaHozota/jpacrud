@@ -24,7 +24,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "WORLD_CITY_VIEW")
 @NamedQuery(name = "CityView.countByNations", query = "select count(1) from CityView as cv where cv.nation like :nation")
-@NamedQuery(name = "CityView.findContinents", query = "select cv.continent from CityView as cv group by cv.continent")
+@NamedQuery(name = "CityView.findContinents", query = "select cv.continent from CityView as cv group by cv.continent order by cv.continent")
 @NamedQuery(name = "CityView.findNationsByCnt", query = "select cv.nation from CityView as cv where cv.continent =:continent group by cv.nation")
 @NamedQuery(name = "CityView.getLanguage", query = "select max(cv.language) from CityView as cv where cv.nation =:nation group by cv.nation")
 public final class CityView implements Serializable {

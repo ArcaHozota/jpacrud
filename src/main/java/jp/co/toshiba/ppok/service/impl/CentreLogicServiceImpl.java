@@ -1,5 +1,6 @@
 package jp.co.toshiba.ppok.service.impl;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.data.domain.Example;
@@ -92,9 +93,10 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			final List<String> collect = nations.stream().filter(item -> StringUtils.isNotEqual(item, nationName))
 					.toList();
 			list.addAll(collect);
-			return list;
+			return list.stream().sorted(Comparator.naturalOrder()).toList();
 		}
-		return this.cityViewRepository.findNationsByCnt(continentVal);
+		return this.cityViewRepository.findNationsByCnt(continentVal).stream().sorted(Comparator.naturalOrder())
+				.toList();
 	}
 
 	@Override
