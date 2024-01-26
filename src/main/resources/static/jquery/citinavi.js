@@ -257,9 +257,11 @@ $("#cityInfoSaveBtn").on('click', function() {
 				if (result.code === 200) {
 					$("#cityAddModal").modal('hide');
 					toSelectedPg(totalRecords, searchName);
-					layer.msg('追加成功！');
+					layer.msg(result.message);
 				} else if (undefined !== result.extend.errorFields.name) {
 					showValidationMsg("#nameInput", "error", result.extend.errorFields.name);
+				} else {
+					layer.msg(result.extend.errorMsg);
 				}
 			}
 		});
@@ -359,9 +361,9 @@ $("#cityInfoChangeBtn").on('click', function() {
 			if (result.code === 200) {
 				$("#cityEditModal").modal('hide');
 				toSelectedPg(currentPage, searchName);
-				layer.msg('更新済み');
-			} else {
 				layer.msg(result.message);
+			} else {
+				layer.msg(result.extend.errorMsg);
 			}
 		}
 	});
@@ -382,9 +384,9 @@ $(document).on('click', '.delete_btn', function() {
 			$.ajax({
 				url: pathdeApp + "/city/" + cityId,
 				type: "DELETE",
-				success: function() {
+				success: function(result) {
 					toSelectedPg(currentPage, searchName);
-					layer.msg('削除済み');
+					layer.msg(result.message);
 				}
 			});
 		}

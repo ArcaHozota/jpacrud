@@ -19,9 +19,9 @@ import jp.co.toshiba.ppok.entity.CityView;
 import jp.co.toshiba.ppok.repository.CityRepository;
 import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
-import jp.co.toshiba.ppok.utils.CommonException;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
+import jp.co.toshiba.ppok.utils.RestMsg;
 import jp.co.toshiba.ppok.utils.SecondBeanUtils;
 import jp.co.toshiba.ppok.utils.StringUtils;
 import lombok.AccessLevel;
@@ -198,7 +198,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void saveById(final CityDto cityDto) {
+	public RestMsg saveById(final CityDto cityDto) {
 		final City city = new City();
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		final Integer saiban = this.cityRepository.saiban();
@@ -207,16 +207,24 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		city.setCountryCode(countryCode);
 		city.setDeleteFlg(Messages.MSG007);
 		this.cityRepository.saveAndFlush(city);
+		return RestMsg.success(Messages.MSG011);
 	}
 
 	@Override
-	public void updateById(final CityDto cityDto) {
-		final City city = this.cityRepository.findById(cityDto.id()).orElseThrow(() -> {
-			throw new CommonException(Messages.MSG009);
-		});
-		SecondBeanUtils.copyNullableProperties(cityDto, city);
+	public RestMsg updateById(final CityDto cityDto) {
+		final City city = this.cityRepository.findById(cityDto.id()).orElse(null);
+		if (city == null) {
+			return RestMsg.failure().add("errorMsg", Messages.MSG009);
+		}
+		final City original = new City();
+		SecondBeanUtils.copyNullableProperties(city, original);
 		final String countryCode = this.getCountryCode(cityDto.nation());
 		city.setCountryCode(countryCode);
+		SecondBeanUtils.copyNullableProperties(cityDto, city);
+		if (original.equals(city)) {
+			return RestMsg.failure().add("errorMsg", Messages.MSG012);
+		}
 		this.cityRepository.saveAndFlush(city);
+		return RestMsg.success(Messages.MSG010);
 	}
 }

@@ -29,4 +29,10 @@ public final class Messages {
 	public static final String MSG008 = "removed";
 
 	public static final String MSG009 = "システムエラー";
+
+	public static final String MSG010 = "更新済み";
+
+	public static final String MSG011 = "追加済み";
+
+	public static final String MSG012 = "変更なし";
 }

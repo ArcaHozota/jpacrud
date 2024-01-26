@@ -5,6 +5,7 @@ import java.util.List;
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
 import jp.co.toshiba.ppok.utils.Pagination;
+import jp.co.toshiba.ppok.utils.RestMsg;
 
 /**
  * 中央処理サービスインターフェス
@@ -73,12 +74,12 @@ public interface CentreLogicService {
 	 *
 	 * @param cityDto 都市情報
 	 */
-	void saveById(CityDto cityDto);
+	RestMsg saveById(CityDto cityDto);
 
 	/**
 	 * 入力した都市情報を更新する
 	 *
 	 * @param cityDto 都市情報
 	 */
-	void updateById(CityDto cityDto);
+	RestMsg updateById(CityDto cityDto);
 }

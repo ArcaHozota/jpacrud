@@ -133,8 +133,7 @@ public class CentreController {
 	 */
 	@PostMapping(value = "/city")
 	public RestMsg saveCityInfo(@RequestBody final CityDto cityDto) {
-		this.centreLogicService.saveById(cityDto);
-		return RestMsg.success();
+		return this.centreLogicService.saveById(cityDto);
 	}
 
 	/**
@@ -145,7 +144,6 @@ public class CentreController {
 	 */
 	@PutMapping(value = "/city/{id}")
 	public RestMsg updateCityDto(@RequestBody final CityDto cityDto) {
-		this.centreLogicService.updateById(cityDto);
-		return RestMsg.success();
+		return this.centreLogicService.updateById(cityDto);
 	}
 }
