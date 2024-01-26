@@ -103,6 +103,15 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				cityInfo.getDistrict(), cityInfo.getPopulation(), cityInfo.getLanguage());
 	}
 
+	private String getCountryCode(final String nationName) {
+		final CityView cityView = new CityView();
+		cityView.setNation(nationName);
+		final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
+		final List<Integer> ids = this.cityViewRepository.findAll(example).stream().map(CityView::getId).toList();
+		final List<City> cities = this.cityRepository.findAllById(ids);
+		return cities.get(0).getCountryCode();
+	}
+
 	@Override
 	public Pagination<CityDto> getPageInfo(final Integer pageNum, final String keyword) {
 		final int jpaPageNum = pageNum - 1;
@@ -189,19 +198,21 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public void saveById(final CityDto cityDto) {
-		final Integer saiban = this.cityRepository.saiban();
 		final City city = new City();
+		SecondBeanUtils.copyNullableProperties(cityDto, city);
+		final Integer saiban = this.cityRepository.saiban();
+		final String countryCode = this.getCountryCode(cityDto.nation());
 		city.setId(saiban);
-		city.setName(cityDto.name());
-		city.setDistrict(cityDto.district());
-		city.setPopulation(cityDto.population());
+		city.setCountryCode(countryCode);
 		city.setDeleteFlg(Messages.MSG007);
 		this.cityRepository.saveAndFlush(city);
 	}
 
 	@Override
 	public void updateById(final CityDto cityDto) {
-		final City city = this.cityRepository.findById(cityDto.id()).orElseGet(City::new);
+		final City city = this.cityRepository.findById(cityDto.id()).orElseThrow(() -> {
+			throw new RuntimeException("システムエラー");
+		});
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		this.cityRepository.saveAndFlush(city);
 	}
