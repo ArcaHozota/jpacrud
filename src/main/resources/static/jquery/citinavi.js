@@ -257,6 +257,7 @@ $("#cityInfoSaveBtn").on('click', function() {
 				if (result.code === 200) {
 					$("#cityAddModal").modal('hide');
 					toSelectedPg(totalRecords, searchName);
+					layer.msg('追加成功！');
 				} else if (undefined !== result.extend.errorFields.name) {
 					showValidationMsg("#nameInput", "error", result.extend.errorFields.name);
 				}
@@ -354,9 +355,14 @@ $("#cityInfoChangeBtn").on('click', function() {
 			'district': inputDistrict,
 			'population': inputPopulation
 		}),
-		success: function() {
-			$("#cityEditModal").modal('hide');
-			toSelectedPg(currentPage, searchName);
+		success: function(result) {
+			if (result.code === 200) {
+				$("#cityEditModal").modal('hide');
+				toSelectedPg(currentPage, searchName);
+				layer.msg('更新済み');
+			} else {
+				layer.msg(result.message);
+			}
 		}
 	});
 });
@@ -365,15 +371,24 @@ $("#cityInfoChangeBtn").on('click', function() {
 $(document).on('click', '.delete_btn', function() {
 	let cityName = $(this).parents("tr").find("td:eq(0)").text().trim();
 	let cityId = $(this).attr("deleteId");
-	if (confirm("この" + cityName + "という都市の情報を削除する、よろしいでしょうか。")) {
-		$.ajax({
-			url: pathdeApp + "/city/" + cityId,
-			type: "DELETE",
-			success: function() {
-				toSelectedPg(currentPage, searchName);
-			}
-		});
-	}
+	layer.confirm(
+		'この「' + cityName + '」という都市の情報を削除する、よろしいでしょうか。',
+		{
+			title: '警告',
+			icon: 0,
+			skin: 'layui-layer-molv',
+			btn: '確定'
+		}, function() {
+			$.ajax({
+				url: pathdeApp + "/city/" + cityId,
+				type: "DELETE",
+				success: function() {
+					toSelectedPg(currentPage, searchName);
+					layer.msg('削除済み');
+				}
+			});
+		}
+	);
 });
 
 // モーダルフォームをリセットする

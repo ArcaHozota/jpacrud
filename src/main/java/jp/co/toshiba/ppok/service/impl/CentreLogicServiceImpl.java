@@ -214,6 +214,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			throw new RuntimeException("システムエラー");
 		});
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
+		final String countryCode = this.getCountryCode(cityDto.nation());
+		city.setCountryCode(countryCode);
 		this.cityRepository.saveAndFlush(city);
 	}
 }
