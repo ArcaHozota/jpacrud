@@ -21,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "city")
+@Table(name = "WORLD_CITY")
 @NamedQuery(name = "City.saiban", query = "select count(cn.id) + 1 from City as cn")
 @NamedQuery(name = "City.removeById", query = "update City as cn set cn.deleteFlg = 'removed' where cn.id =:id")
 public final class City implements Serializable {

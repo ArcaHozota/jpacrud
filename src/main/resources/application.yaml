@@ -4,10 +4,13 @@ spring:
   application:
     name: sshcrud
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://52.199.163.241:5432/world
-    username: postgres
-    password: postgres
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@//52.199.163.241:1521/FREEPDB1
+    username: JPTCRSDBA1
+    password: JPTCRSDBA1
+    hikari:
+      maximum-pool-size: 30
+      max-lifetime: 1500000
   jpa:
     hibernate:
       ddl-auto: update

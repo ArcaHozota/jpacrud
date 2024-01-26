@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "city_info")
+@Table(name = "WORLD_CITY_VIEW")
 @NamedQuery(name = "CityInfo.getLanguage", query = "select max(cv.language) from CityInfo as cv where cv.nation =:nation group by cv.nation")
 public final class CityView implements Serializable {
 
