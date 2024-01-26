@@ -10,14 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import jp.co.toshiba.ppok.entity.CityInfo;
+import jp.co.toshiba.ppok.entity.CityView;
 
 /**
  * 都市情報リポジトリ
  *
  * @author Administrator
  */
-public interface CityInfoRepository extends JpaRepository<CityInfo, Integer>, JpaSpecificationExecutor<CityInfo> {
+public interface CityViewRepository extends JpaRepository<CityView, Integer>, JpaSpecificationExecutor<CityView> {
 
 	/**
 	 * 人口数量降順で都市情報を検索する
@@ -26,7 +26,7 @@ public interface CityInfoRepository extends JpaRepository<CityInfo, Integer>, Jp
 	 */
 	@Query(value = "select cv.id, cv.name, cv.continent, cv.nation, cv.district, cv.population, cv.language "
 			+ "from city_info as cv order by cv.population desc limit :sortNumber", nativeQuery = true)
-	List<CityInfo> findMaximumRanks(@Param("sortNumber") Integer sort);
+	List<CityView> findMaximumRanks(@Param("sortNumber") Integer sort);
 
 	/**
 	 * 人口数量昇順で都市情報を検索する
@@ -35,7 +35,7 @@ public interface CityInfoRepository extends JpaRepository<CityInfo, Integer>, Jp
 	 */
 	@Query(value = "select cv.id, cv.name, cv.continent, cv.nation, cv.district, cv.population, cv.language "
 			+ "from city_info as cv order by cv.population asc limit :sortNumber", nativeQuery = true)
-	List<CityInfo> findMinimumRanks(@Param("sortNumber") Integer sort);
+	List<CityView> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
 	 * 国名によって公用語を取得する

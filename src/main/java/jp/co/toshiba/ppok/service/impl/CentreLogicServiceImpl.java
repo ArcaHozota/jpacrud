@@ -15,10 +15,9 @@ import com.google.common.collect.Lists;
 
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
-import jp.co.toshiba.ppok.entity.CityInfo;
-import jp.co.toshiba.ppok.repository.CityInfoRepository;
+import jp.co.toshiba.ppok.entity.CityView;
 import jp.co.toshiba.ppok.repository.CityRepository;
-import jp.co.toshiba.ppok.repository.CountryRepository;
+import jp.co.toshiba.ppok.repository.CityViewRepository;
 import jp.co.toshiba.ppok.service.CentreLogicService;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
@@ -58,12 +57,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	/**
 	 * 都市情報リポジトリ
 	 */
-	private final CityInfoRepository cityInfoRepository;
-
-	/**
-	 * 国家リポジトリ
-	 */
-	private final CountryRepository countryRepository;
+	private final CityViewRepository cityInfoRepository;
 
 	@Override
 	public List<City> checkDuplicatedNames(final String cityName) {
@@ -89,7 +83,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		if (StringUtils.isDigital(continentVal)) {
 			final Integer id = Integer.parseInt(continentVal);
 			final List<String> list = Lists.newArrayList();
-			final CityInfo cityView = this.cityInfoRepository.findById(id).orElseGet(CityInfo::new);
+			final CityView cityView = this.cityInfoRepository.findById(id).orElseGet(CityView::new);
 			final String nationName = cityView.getNation();
 			list.add(nationName);
 			final List<String> nations = this.countryRepository.findNationsByCnt(cityView.getContinent());
@@ -103,7 +97,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public CityDto getCityInfoById(final Integer id) {
-		final CityInfo cityInfo = this.cityInfoRepository.findById(id).orElseGet(CityInfo::new);
+		final CityView cityInfo = this.cityInfoRepository.findById(id).orElseGet(CityView::new);
 		return new CityDto(cityInfo.getId(), cityInfo.getName(), cityInfo.getContinent(), cityInfo.getNation(),
 				cityInfo.getDistrict(), cityInfo.getPopulation(), cityInfo.getLanguage());
 	}
@@ -116,7 +110,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		// キーワードの属性を判断する；
 		if (StringUtils.isNotEmpty(keyword)) {
 			// エンティティを宣言する；
-			final CityInfo cityView = new CityInfo();
+			final CityView cityView = new CityView();
 			final String hankakuKeyword = StringUtils.toHankaku(keyword);
 			final int pageMin = PAGE_SIZE * jpaPageNum;
 			final int pageMax = PAGE_SIZE * pageNum;
@@ -159,8 +153,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			final String nationCode = this.countryRepository.findNationCode(hankakuKeyword);
 			if (StringUtils.isNotEmpty(nationCode)) {
 				cityView.setNation(hankakuKeyword);
-				final Example<CityInfo> example = Example.of(cityView, ExampleMatcher.matching());
-				final Page<CityInfo> pages = this.cityInfoRepository.findAll(example, pageRequest);
+				final Example<CityView> example = Example.of(cityView, ExampleMatcher.matching());
+				final Page<CityView> pages = this.cityInfoRepository.findAll(example, pageRequest);
 				final List<CityDto> pagesByNation = pages.getContent().stream()
 						.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 								item.getDistrict(), item.getPopulation(), item.getLanguage()))
@@ -170,8 +164,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			cityView.setName(hankakuKeyword);
 			final ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name",
 					GenericPropertyMatchers.contains());
-			final Example<CityInfo> example = Example.of(cityView, matcher);
-			final Page<CityInfo> pages = this.cityInfoRepository.findAll(example, pageRequest);
+			final Example<CityView> example = Example.of(cityView, matcher);
+			final Page<CityView> pages = this.cityInfoRepository.findAll(example, pageRequest);
 			final List<CityDto> pagesByName = pages.getContent().stream()
 					.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 							item.getDistrict(), item.getPopulation(), item.getLanguage()))
@@ -179,7 +173,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			return Pagination.of(pagesByName, pages.getTotalElements(), pageNum, PAGE_SIZE, NAVIGATION_PAGES);
 		}
 		// ページング検索；
-		final Page<CityInfo> pages = this.cityInfoRepository.findAll(pageRequest);
+		final Page<CityView> pages = this.cityInfoRepository.findAll(pageRequest);
 		final List<CityDto> pageInfos = pages.getContent().stream()
 				.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 						item.getDistrict(), item.getPopulation(), item.getLanguage()))
