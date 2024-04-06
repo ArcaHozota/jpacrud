@@ -7,10 +7,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>CityList</title>
 	<!--フレームワークjQueryを導入-->
-	<script type="text/javascript" src="../static/jquery/jquery-3.7.1.min.js"></script>
+	<script type="text/javascript" src="../static/js/jquery-3.7.1.min.js"></script>
 	<!--フレームワークBootstrapを導入-->
 	<link rel="shortcut icon" type="image/x-icon" href="../static/favicon.ico" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma-rtl.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<link rel="stylesheet" href="../static/css/bulma.css">
 	<script type="text/javascript" src="../static/layer/layer.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -30,14 +31,14 @@
 				<div class="input-group col-lg-5">
 					<span class="input-group-text">@</span>
 					<input id="keywordInput" class="form-control" type="text" placeholder="検索条件を入力してください">
-					<button id="searchBtn" class="btn btn-warning my-2 my-sm-0" type="button">
-						<i class="bi bi-search"></i> 検索
+					<button id="searchBtn" class="button is-warning is-dark" type="button">
+						<i class="fa-solid fa-magnifying-glass"></i> 検索
 					</button>
 				</div>
 			</form>
 			<div class="col-lg-2 offset-lg-5">
-				<button class="btn btn-success" id="cityAddModalBtn">
-					<i class="bi bi-calendar2-plus-fill"></i> 情報追加
+				<button class="button is-success is-dark" id="cityAddModalBtn">
+					<i class="fa-solid fa-tree-city"></i> 情報追加
 				</button>
 			</div>
 		</div>
@@ -175,7 +176,7 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="../static/jquery/citinavi.js"></script>
+	<script type="text/javascript" src="../static/js/citinavi.js"></script>
 </body>
 
 </html>
