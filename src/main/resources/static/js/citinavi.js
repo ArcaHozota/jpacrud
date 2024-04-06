@@ -64,10 +64,10 @@ function buildCityTable(result) {
 			languageTd = $("<td class='text-center table-light' style='width:80px;font-size:15px;vertical-align:bottom;'></td>").append(languageName);
 		}
 		let editBtn = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn")
-			.append($("<i class='bi bi-pencil-fill'></i>")).append("編集");
+			.append($("<i class='fa-solid fa-pencil'></i>")).append("編集");
 		editBtn.attr("editId", item.id);
 		let deleteBtn = $("<button></button>").addClass("btn btn-danger btn-sm delete_btn")
-			.append($("<i class='bi bi-trash'></i>")).append("削除");
+			.append($("<i class='fa-solid fa-trash'></i>")).append("削除");
 		deleteBtn.attr("deleteId", item.id);
 		let btnTd = $("<td class='text-center table-light' style='width:120px;vertical-align:bottom;'></td>").append(editBtn).append(" ").append(deleteBtn);
 		$("<tr></tr>").append(idTd).append(nameTd).append(continentTd).append(nationTd).append(districtTd).append(populationTd).append(languageTd)
@@ -91,7 +91,7 @@ function buildPageNavi(result) {
 	$("#pageNavi").empty();
 	let ul = $("<ul></ul>").addClass("pagination");
 	let firstPageLi = $("<li class='page-item'></li>").append(
-		$("<a class='page-link'></a>").append("最初のページへ").attr("href", "#"));
+		$("<a class='page-link'></a>").append("最初へ").attr("href", "#"));
 	let previousPageLi = $("<li class='page-item'></li>").append(
 		$("<a class='page-link'></a>").append("&laquo;").attr("href", "#"));
 	if (!result.extend.pageInfo.hasPreviousPage) {
@@ -108,7 +108,7 @@ function buildPageNavi(result) {
 	let nextPageLi = $("<li class='page-item'></li>").append(
 		$("<a class='page-link'></a>").append("&raquo;").attr("href", "#"));
 	let lastPageLi = $("<li class='page-item'></li>").append(
-		$("<a class='page-link'></a>").append("最後のページへ").attr("href", "#"));
+		$("<a class='page-link'></a>").append("最後へ").attr("href", "#"));
 	if (!result.extend.pageInfo.hasNextPage) {
 		nextPageLi.addClass("disabled");
 		lastPageLi.addClass("disabled");
