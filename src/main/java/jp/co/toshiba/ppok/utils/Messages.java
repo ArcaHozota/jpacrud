@@ -35,4 +35,6 @@ public final class Messages {
 	public static final String MSG011 = "追加済み";
 
 	public static final String MSG012 = "変更なし";
+
+	public static final String MSG013 = "削除済み";
 }

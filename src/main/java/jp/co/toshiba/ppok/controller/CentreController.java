@@ -64,8 +64,7 @@ public class CentreController {
 	 */
 	@DeleteMapping(value = "/city/{id}")
 	public RestMsg deleteCityDto(@PathVariable("id") final Integer id) {
-		this.centreLogicService.removeById(id);
-		return RestMsg.success();
+		return this.centreLogicService.removeById(id);
 	}
 
 	/**

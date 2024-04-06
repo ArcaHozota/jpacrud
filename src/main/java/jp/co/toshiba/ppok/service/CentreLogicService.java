@@ -67,7 +67,7 @@ public interface CentreLogicService {
 	 *
 	 * @param id 都市ID
 	 */
-	void removeById(Integer id);
+	RestMsg removeById(Integer id);
 
 	/**
 	 * 入力した都市情報を保存する

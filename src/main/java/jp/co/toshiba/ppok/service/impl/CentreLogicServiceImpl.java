@@ -195,8 +195,9 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	}
 
 	@Override
-	public void removeById(final Integer id) {
+	public RestMsg removeById(final Integer id) {
 		this.cityRepository.removeById(id);
+		return RestMsg.success(Messages.MSG013);
 	}
 
 	@Override
