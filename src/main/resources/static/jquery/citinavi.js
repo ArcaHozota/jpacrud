@@ -373,24 +373,29 @@ $("#cityInfoChangeBtn").on('click', function() {
 $(document).on('click', '.delete_btn', function() {
 	let cityName = $(this).parents("tr").find("td:eq(0)").text().trim();
 	let cityId = $(this).attr("deleteId");
-	layer.confirm(
-		'この「' + cityName + '」という都市の情報を削除する、よろしいでしょうか。',
-		{
-			title: '警告',
-			icon: 0,
-			skin: 'layui-layer-molv',
-			btn: '確定'
-		}, function() {
+	swal.fire({
+		title: 'メッセージ',
+		text: 'この「' + cityName + '」という都市の情報を削除する、よろしいでしょうか。',
+		icon: 'question',
+		showDenyButton: true,
+		denyButtonText: 'いいえ',
+		denyButtonColor: '#002FA7',
+		confirmButtonText: 'はい',
+		confirmButtonColor: '#7F0020'
+	}).then((result) => {
+		if (result.isConfirmed) {
 			$.ajax({
 				url: pathdeApp + "/city/" + cityId,
-				type: "DELETE",
+				type: 'DELETE',
 				success: function(result) {
 					toSelectedPg(currentPage, searchName);
 					layer.msg(result.message);
 				}
 			});
+		} else {
+			$(this).close();
 		}
-	);
+	});
 });
 
 // モーダルフォームをリセットする
