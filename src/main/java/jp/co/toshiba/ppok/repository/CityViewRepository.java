@@ -37,7 +37,7 @@ public interface CityViewRepository extends JpaRepository<CityView, Integer>, Jp
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "SELECT WCV.* FROM WORLD_CITY_VIEW WCV ORDER BY cv.population DESC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
+	@Query(value = "SELECT WCV.* FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION DESC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
 	List<CityView> findMaximumRanks(@Param("sortNumber") Integer sort);
 
 	/**
@@ -45,7 +45,7 @@ public interface CityViewRepository extends JpaRepository<CityView, Integer>, Jp
 	 *
 	 * @return List<CityView>
 	 */
-	@Query(value = "SELECT WCV.* FROM WORLD_CITY_VIEW WCV ORDER BY cv.population ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
+	@Query(value = "SELECT WCV.* FROM WORLD_CITY_VIEW WCV ORDER BY WCV.POPULATION ASC FETCH FIRST :sortNumber ROWS ONLY", nativeQuery = true)
 	List<CityView> findMinimumRanks(@Param("sortNumber") Integer sort);
 
 	/**
