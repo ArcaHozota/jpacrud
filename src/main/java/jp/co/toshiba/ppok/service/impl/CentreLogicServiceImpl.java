@@ -236,7 +236,11 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		if (original.equals(city)) {
 			return RestMsg.failure().add(ERROR_MSG, Messages.MSG012);
 		}
-		this.cityRepository.saveAndFlush(city);
+		try {
+			this.cityRepository.saveAndFlush(city);
+		} catch (final Exception e) {
+			return RestMsg.failure().add(ERROR_MSG, Messages.MSG009);
+		}
 		return RestMsg.success(Messages.MSG010);
 	}
 }
