@@ -53,6 +53,11 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	private static final Integer SORT_NUMBER = 100;
 
 	/**
+	 * エラーメッセージ
+	 */
+	private static final String ERROR_MSG = "errorMsg";
+
+	/**
 	 * 都市リポジトリ
 	 */
 	private final CityRepository cityRepository;
@@ -203,16 +208,16 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	@Override
 	public RestMsg saveById(final CityDto cityDto) {
 		final City city = new City();
-		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		final Integer saiban = this.cityRepository.saiban();
 		final String countryCode = this.getCountryCode(cityDto.nation());
+		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		city.setId(saiban);
 		city.setCountryCode(countryCode);
 		city.setDeleteFlg(Messages.MSG007);
 		try {
 			this.cityRepository.saveAndFlush(city);
 		} catch (final Exception e) {
-			return RestMsg.failure().add("errorMsg", Messages.MSG009);
+			return RestMsg.failure().add(ERROR_MSG, Messages.MSG009);
 		}
 		return RestMsg.success(Messages.MSG011);
 	}
@@ -221,7 +226,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	public RestMsg updateById(final CityDto cityDto) {
 		final City city = this.cityRepository.findById(cityDto.id()).orElse(null);
 		if (city == null) {
-			return RestMsg.failure().add("errorMsg", Messages.MSG009);
+			return RestMsg.failure().add(ERROR_MSG, Messages.MSG009);
 		}
 		final City original = new City();
 		SecondBeanUtils.copyNullableProperties(city, original);
@@ -229,7 +234,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		city.setCountryCode(countryCode);
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		if (original.equals(city)) {
-			return RestMsg.failure().add("errorMsg", Messages.MSG012);
+			return RestMsg.failure().add(ERROR_MSG, Messages.MSG012);
 		}
 		this.cityRepository.saveAndFlush(city);
 		return RestMsg.success(Messages.MSG010);
