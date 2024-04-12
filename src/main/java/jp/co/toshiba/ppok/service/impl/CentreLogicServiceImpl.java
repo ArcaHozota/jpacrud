@@ -209,7 +209,11 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		city.setId(saiban);
 		city.setCountryCode(countryCode);
 		city.setDeleteFlg(Messages.MSG007);
-		this.cityRepository.saveAndFlush(city);
+		try {
+			this.cityRepository.saveAndFlush(city);
+		} catch (final Exception e) {
+			return RestMsg.failure().add("errorMsg", Messages.MSG009);
+		}
 		return RestMsg.success(Messages.MSG011);
 	}
 
