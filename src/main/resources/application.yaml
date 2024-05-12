@@ -11,13 +11,6 @@ spring:
     hikari:
       maximum-pool-size: 30
       max-lifetime: 1500000
-  jpa:
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    show-sql: true
-    open-in-view: false
   output:
     ansi:
       enabled: ALWAYS
