@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jp.co.toshiba.ppok.dto.CityDto;
-import jp.co.toshiba.ppok.entity.City;
 import jp.co.toshiba.ppok.service.CentreLogicService;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
@@ -49,8 +48,8 @@ public class CentreController {
 		if (!cityName.matches(Messages.MSG006)) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG005);
 		}
-		final List<City> duplicatedNames = this.centreLogicService.checkDuplicatedNames(cityName);
-		if (!duplicatedNames.isEmpty()) {
+		final Boolean checkDuplicated = this.centreLogicService.checkDuplicatedNames(cityName);
+		if (Boolean.FALSE.equals(checkDuplicated)) {
 			return RestMsg.failure().add("validatedMsg", Messages.MSG004);
 		}
 		return RestMsg.success();

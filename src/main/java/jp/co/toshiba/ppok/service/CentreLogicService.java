@@ -3,7 +3,6 @@ package jp.co.toshiba.ppok.service;
 import java.util.List;
 
 import jp.co.toshiba.ppok.dto.CityDto;
-import jp.co.toshiba.ppok.entity.City;
 import jp.co.toshiba.ppok.utils.Pagination;
 import jp.co.toshiba.ppok.utils.RestMsg;
 
@@ -18,9 +17,9 @@ public interface CentreLogicService {
 	 * 入力した都市名の重複するかどうかを検証する
 	 *
 	 * @param cityName 都市名
-	 * @return List<City>
+	 * @return Boolean
 	 */
-	List<City> checkDuplicatedNames(String cityName);
+	Boolean checkDuplicatedNames(String cityName);
 
 	/**
 	 * 大陸情報を取得する
