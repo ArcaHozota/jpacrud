@@ -204,7 +204,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				.fetchSingle().into(CityInfoRecord.class);
 		final CityDto aCityDto = new CityDto(cityInfoRecord.getId(), cityInfoRecord.getName(),
 				cityInfoRecord.getContinent(), cityInfoRecord.getNation(), cityInfoRecord.getDistrict(),
-				cityInfoRecord.getPopulation(), cityInfoRecord.getLanguage());
+				cityInfoRecord.getPopulation(), null);
 		if (aCityDto.equals(cityDto)) {
 			return RestMsg.failure().add("errorMsg", Messages.MSG012);
 		}
