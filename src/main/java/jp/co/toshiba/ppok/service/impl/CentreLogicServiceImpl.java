@@ -175,8 +175,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public RestMsg removeById(final Integer id) {
-		this.dslContext.update(CITY).set(CITY.DELETE_FLG, Messages.MSG008).where(CITY.ID.eq(id));
-		this.dslContext.query("refresh materialized view city_info;");
+		this.dslContext.update(CITY).set(CITY.DELETE_FLG, Messages.MSG008).where(CITY.ID.eq(id)).execute();
+		this.dslContext.query("refresh materialized view city_info;").execute();
 		return RestMsg.success(Messages.MSG013);
 	}
 
@@ -194,7 +194,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		cityRecord.setPopulation(cityDto.population());
 		cityRecord.setDeleteFlg(Messages.MSG007);
 		cityRecord.insert();
-		this.dslContext.query("refresh materialized view city_info;");
+		this.dslContext.query("refresh materialized view city_info;").execute();
 		return RestMsg.success(Messages.MSG011);
 	}
 
