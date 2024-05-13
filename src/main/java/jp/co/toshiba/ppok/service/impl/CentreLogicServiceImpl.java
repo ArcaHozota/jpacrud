@@ -146,7 +146,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			}
 			// ページング検索；
 			final Integer totalRecords = this.dslContext.selectCount().from(CITY_INFO)
-					.where(CITY_INFO.NAME.like(hankakuKeyword)).or(CITY_INFO.NATION.like(hankakuKeyword)).fetchOne()
+					.where(CITY_INFO.NAME.like(hankakuKeyword)).or(CITY_INFO.NATION.like(hankakuKeyword)).fetchSingle()
 					.into(Integer.class);
 			if (totalRecords == 0) {
 				return Pagination.of(Lists.newArrayList(), 0, 1, PAGE_SIZE, NAVIGATION_PAGES);
@@ -161,7 +161,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			return Pagination.of(pageInfos, totalRecords, pageNum, PAGE_SIZE, NAVIGATION_PAGES);
 		}
 		// ページング検索；
-		final Integer totalRecords = this.dslContext.selectCount().from(CITY_INFO).fetchOne().into(Integer.class);
+		final Integer totalRecords = this.dslContext.selectCount().from(CITY_INFO).fetchSingle().into(Integer.class);
 		if (totalRecords == 0) {
 			return Pagination.of(Lists.newArrayList(), 0, 1, PAGE_SIZE, NAVIGATION_PAGES);
 		}
