@@ -144,24 +144,24 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 						NAVIGATION_PAGES);
 			}
 			// ページング検索；
-			final List<CityInfoRecord> totalRecords = this.dslContext.selectFrom(CITY_INFO)
-					.where(CITY_INFO.NAME.like(hankakuKeyword)).or(CITY_INFO.NATION.like(hankakuKeyword))
-					.fetchInto(CityInfoRecord.class);
-			if (totalRecords.isEmpty()) {
+			final Integer totalRecords = this.dslContext.selectCount().from(CITY_INFO)
+					.where(CITY_INFO.NAME.like(hankakuKeyword)).or(CITY_INFO.NATION.like(hankakuKeyword)).fetchOne()
+					.into(Integer.class);
+			if (totalRecords == 0) {
 				return Pagination.of(Lists.newArrayList(), 0, 1, PAGE_SIZE, NAVIGATION_PAGES);
 			}
 			final List<CityInfoRecord> cityInfoRecords = this.dslContext.selectFrom(CITY_INFO)
-					.where(CITY_INFO.NAME.like(hankakuKeyword)).or(CITY_INFO.NATION.like(hankakuKeyword))
+					.where(CITY_INFO.NAME.like(hankakuKeyword).or(CITY_INFO.NATION.like(hankakuKeyword)))
 					.orderBy(CITY_INFO.ID).limit(PAGE_SIZE).offset(offset).fetchInto(CityInfoRecord.class);
 			final List<CityDto> pageInfos = cityInfoRecords.stream()
 					.map(item -> new CityDto(item.getId(), item.getName(), item.getContinent(), item.getNation(),
 							item.getDistrict(), item.getPopulation(), item.getLanguage()))
 					.toList();
-			return Pagination.of(pageInfos, totalRecords.size(), pageNum, PAGE_SIZE, NAVIGATION_PAGES);
+			return Pagination.of(pageInfos, totalRecords, pageNum, PAGE_SIZE, NAVIGATION_PAGES);
 		}
 		// ページング検索；
-		final List<CityInfoRecord> totalRecords = this.dslContext.selectFrom(CITY_INFO).fetchInto(CityInfoRecord.class);
-		if (totalRecords.isEmpty()) {
+		final Integer totalRecords = this.dslContext.selectCount().from(CITY_INFO).fetchOne().into(Integer.class);
+		if (totalRecords == 0) {
 			return Pagination.of(Lists.newArrayList(), 0, 1, PAGE_SIZE, NAVIGATION_PAGES);
 		}
 		final List<CityInfoRecord> cityInfoRecords = this.dslContext.selectFrom(CITY_INFO).orderBy(CITY_INFO.ID)
@@ -169,7 +169,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final List<CityDto> pageInfos = cityInfoRecords.stream().map(item -> new CityDto(item.getId(), item.getName(),
 				item.getContinent(), item.getNation(), item.getDistrict(), item.getPopulation(), item.getLanguage()))
 				.toList();
-		return Pagination.of(pageInfos, totalRecords.size(), pageNum, PAGE_SIZE, NAVIGATION_PAGES);
+		return Pagination.of(pageInfos, totalRecords, pageNum, PAGE_SIZE, NAVIGATION_PAGES);
 	}
 
 	@Override
@@ -180,18 +180,18 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public RestMsg saveById(final CityDto cityDto) {
-//		final City city = new City();
-//		final Integer saiban = this.cityRepository.saiban();
-//		final String countryCode = this.getCountryCode(cityDto.nation());
-//		SecondBeanUtils.copyNullableProperties(cityDto, city);
-//		city.setId(saiban);
-//		city.setCountryCode(countryCode);
-//		city.setDeleteFlg(Messages.MSG007);
-//		try {
-//			this.cityRepository.saveAndFlush(city);
-//		} catch (final Exception e) {
-//			return RestMsg.failure().add(ERROR_MSG, Messages.MSG009);
-//		}
+		final Integer totalRecords = this.dslContext.selectCount().from(CITY).fetchOne().into(Integer.class);
+		final String code = this.dslContext.selectDistinct(COUNTRY.CODE).from(COUNTRY)
+				.where(COUNTRY.DELETE_FLG.eq(Messages.MSG007)).and(COUNTRY.NAME.eq(cityDto.nation())).fetchSingle()
+				.into(String.class);
+		final CityRecord cityRecord = this.dslContext.newRecord(CITY);
+		cityRecord.setId(totalRecords + 1);
+		cityRecord.setName(cityDto.name());
+		cityRecord.setCountryCode(code);
+		cityRecord.setDistrict(cityDto.district());
+		cityRecord.setPopulation(cityDto.population());
+		cityRecord.setDeleteFlg(Messages.MSG007);
+		cityRecord.insert();
 		return RestMsg.success(Messages.MSG011);
 	}
 
