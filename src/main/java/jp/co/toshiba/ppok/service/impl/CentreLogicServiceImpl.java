@@ -200,23 +200,25 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public RestMsg updateById(final CityDto cityDto) {
-//		final City city = this.cityRepository.findById(cityDto.id()).orElse(null);
-//		if (city == null) {
-//			return RestMsg.failure().add(ERROR_MSG, Messages.MSG009);
-//		}
-//		final City original = new City();
-//		SecondBeanUtils.copyNullableProperties(city, original);
-//		final String countryCode = this.getCountryCode(cityDto.nation());
-//		city.setCountryCode(countryCode);
-//		SecondBeanUtils.copyNullableProperties(cityDto, city);
-//		if (original.equals(city)) {
-//			return RestMsg.failure().add(ERROR_MSG, Messages.MSG012);
-//		}
-//		try {
-//			this.cityRepository.saveAndFlush(city);
-//		} catch (final Exception e) {
-//			return RestMsg.failure().add(ERROR_MSG, Messages.MSG009);
-//		}
+		final CityInfoRecord cityInfoRecord = this.dslContext.selectFrom(CITY_INFO).where(CITY_INFO.ID.eq(cityDto.id()))
+				.fetchSingle().into(CityInfoRecord.class);
+		final CityDto aCityDto = new CityDto(cityInfoRecord.getId(), cityInfoRecord.getName(),
+				cityInfoRecord.getContinent(), cityInfoRecord.getNation(), cityInfoRecord.getDistrict(),
+				cityInfoRecord.getPopulation(), cityInfoRecord.getLanguage());
+		if (aCityDto.equals(cityDto)) {
+			return RestMsg.failure().add("errorMsg", Messages.MSG012);
+		}
+		final String code = this.dslContext.selectDistinct(COUNTRY.CODE).from(COUNTRY)
+				.where(COUNTRY.DELETE_FLG.eq(Messages.MSG007)).and(COUNTRY.NAME.eq(cityDto.nation())).fetchSingle()
+				.into(String.class);
+		final CityRecord cityRecord = this.dslContext.newRecord(CITY);
+		cityRecord.setId(cityDto.id());
+		cityRecord.setName(cityDto.name());
+		cityRecord.setCountryCode(code);
+		cityRecord.setDistrict(cityDto.district());
+		cityRecord.setPopulation(cityDto.population());
+		cityRecord.setDeleteFlg(Messages.MSG007);
+		this.dslContext.update(CITY).set(cityRecord).where(CITY.ID.eq(cityRecord.getId())).execute();
 		return RestMsg.success(Messages.MSG010);
 	}
 }
