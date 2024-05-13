@@ -66,7 +66,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		return this.dslContext.selectFrom(CITY_INFO).where(CITY_INFO.NATION.eq(nationVal)).fetchSingle().getLanguage();
+		return this.dslContext.selectDistinct(CITY_INFO.LANGUAGE).from(CITY_INFO).where(CITY_INFO.NATION.eq(nationVal))
+				.fetchSingle().into(String.class);
 	}
 
 	@Override
