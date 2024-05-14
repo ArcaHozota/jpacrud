@@ -218,7 +218,8 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		cityRecord.setDistrict(cityDto.district());
 		cityRecord.setPopulation(cityDto.population());
 		cityRecord.setDeleteFlg(Messages.MSG007);
-		this.dslContext.update(CITY).set(cityRecord).where(CITY.ID.eq(cityRecord.getId())).execute();
+		this.dslContext.update(CITY).set(cityRecord).where(CITY.DELETE_FLG.eq(Messages.MSG007))
+				.and(CITY.ID.eq(cityRecord.getId())).execute();
 		this.dslContext.query("refresh materialized view city_info;").execute();
 		return RestMsg.success(Messages.MSG010);
 	}
