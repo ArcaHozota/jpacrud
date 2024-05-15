@@ -1,19 +1,14 @@
 package jp.co.toshiba.ppok.service.impl;
 
-import static jp.co.toshiba.ppok.jooq.Tables.CITY;
-import static jp.co.toshiba.ppok.jooq.Tables.CITY_INFO;
-import static jp.co.toshiba.ppok.jooq.Tables.COUNTRY;
-
 import java.util.List;
 
-import org.jooq.DSLContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
 import jp.co.toshiba.ppok.dto.CityDto;
-import jp.co.toshiba.ppok.jooq.tables.records.CityInfoRecord;
-import jp.co.toshiba.ppok.jooq.tables.records.CityRecord;
+import jp.co.toshiba.ppok.entity.CityView;
 import jp.co.toshiba.ppok.service.CentreLogicService;
 import jp.co.toshiba.ppok.utils.Messages;
 import jp.co.toshiba.ppok.utils.Pagination;
@@ -49,53 +44,53 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 	/**
 	 * 共通リポジトリ
 	 */
-	private final DSLContext dslContext;
+	private final JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Boolean checkDuplicatedNames(final String cityName) {
-		final List<CityRecord> cityRecords = this.dslContext.selectFrom(CITY).where(CITY.DELETE_FLG.eq(Messages.MSG007))
-				.and(CITY.NAME.eq(cityName)).fetchInto(CityRecord.class);
-		return cityRecords.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
+		final Integer cityNameCount = this.jdbcTemplate
+				.queryForObject("SELECT COUNT(1) FROM WORLD_CITY_VIEW WCV WHERE WCV.NAME = " + cityName, Integer.class);
+		return cityNameCount > 0 ? Boolean.TRUE : Boolean.FALSE;
 	}
 
 	@Override
 	public List<String> findAllContinents() {
-		return this.dslContext.selectDistinct(COUNTRY.CONTINENT).from(COUNTRY)
-				.where(COUNTRY.DELETE_FLG.eq(Messages.MSG007)).orderBy(COUNTRY.CONTINENT.asc()).fetchInto(String.class);
+		return this.jdbcTemplate.queryForList(
+				"SELECT DISTINCT WCY.CONTINENT FROM WORLD_COUNTRY WCY ORDER BY WCY.CONTINENT ASC", String.class);
 	}
 
 	@Override
 	public String findLanguageByCty(final String nationVal) {
-		return this.dslContext.selectDistinct(CITY_INFO.LANGUAGE).from(CITY_INFO).where(CITY_INFO.NATION.eq(nationVal))
-				.fetchSingle().into(String.class);
+		return this.jdbcTemplate.queryForObject(
+				"SELECT WCV.LANGUAGE FROM WORLD_CITY_VIEW WCV WHERE WCV.NATION = " + nationVal, String.class);
 	}
 
 	@Override
 	public List<String> findNationsByCnt(final String continentVal) {
 		final List<String> list = Lists.newArrayList();
 		if (StringUtils.isDigital(continentVal)) {
-			final CityInfoRecord cityInfoRecord = this.dslContext.selectFrom(CITY_INFO)
-					.where(CITY_INFO.ID.eq(Integer.parseInt(continentVal))).fetchSingle();
-			final String nationName = cityInfoRecord.getNation();
-			list.add(nationName);
-			final List<String> nations = this.dslContext.selectDistinct(COUNTRY.NAME).from(COUNTRY)
-					.where(COUNTRY.DELETE_FLG.eq(Messages.MSG007))
-					.and(COUNTRY.CONTINENT.eq(cityInfoRecord.getContinent())).orderBy(COUNTRY.NAME.asc())
-					.fetchInto(String.class);
+			final CityView cityView = this.jdbcTemplate.queryForObject(
+					"SELECT WCV.* FROM WORLD_CITY_VIEW WCV WHERE WCV.ID = " + continentVal, CityView.class);
+			list.add(cityView.getNation());
+			final List<String> nations = this.jdbcTemplate.queryForList(
+					"SELECT DISTINCT WCY.NAME FROM WORLD_COUNTRY WCY WHERE WCY.DEL_FLG = 'visible' AND WCY.CONTINENT = "
+							+ cityView.getContinent() + "ORDER BY WCY.NAME",
+					String.class);
 			list.addAll(nations);
 			return list.stream().distinct().toList();
 		}
-		return this.dslContext.selectDistinct(COUNTRY.NAME).from(COUNTRY).where(COUNTRY.DELETE_FLG.eq(Messages.MSG007))
-				.and(COUNTRY.CONTINENT.eq(continentVal)).orderBy(COUNTRY.NAME.asc()).fetchInto(String.class);
+		return this.jdbcTemplate.queryForList(
+				"SELECT DISTINCT WCY.NAME FROM WORLD_COUNTRY WCY WHERE WCY.DEL_FLG = 'visible' AND WCY.CONTINENT = "
+						+ continentVal + "ORDER BY WCY.NAME",
+				String.class);
 	}
 
 	@Override
 	public CityDto getCityInfoById(final Integer id) {
-		final CityInfoRecord cityInfoRecord = this.dslContext.selectFrom(CITY_INFO).where(CITY_INFO.ID.eq(id))
-				.fetchSingle();
-		return new CityDto(cityInfoRecord.getId(), cityInfoRecord.getName(), cityInfoRecord.getContinent(),
-				cityInfoRecord.getNation(), cityInfoRecord.getDistrict(), cityInfoRecord.getPopulation(),
-				cityInfoRecord.getLanguage());
+		final CityView cityView = this.jdbcTemplate
+				.queryForObject("SELECT WCV.* FROM WORLD_CITY_VIEW WCV WHERE WCV.ID = " + id, CityView.class);
+		return new CityDto(cityView.getId(), cityView.getName(), cityView.getContinent(), cityView.getNation(),
+				cityView.getDistrict(), cityView.getPopulation(), cityView.getLanguage());
 	}
 
 	@Override
