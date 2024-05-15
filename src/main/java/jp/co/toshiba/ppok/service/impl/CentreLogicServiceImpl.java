@@ -222,7 +222,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		this.jdbcClient.sql(
 				"INSERT INTO WORLD_CITY WC (WC.ID, WC.NAME, WC.COUNTRY_CODE, WC.DISTRICT, WC.POPULATION, WC.DELETE_FLG) "
 						+ "VALUES (:id, :name, :countryCode, :district, :population, :deleteFlg)")
-				.param(paramMap).update();
+				.params(paramMap).update();
 		return RestMsg.success(Messages.MSG011);
 	}
 
@@ -246,7 +246,7 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		final Map<String, Object> paramMap = this.getParamMap(city);
 		this.jdbcClient.sql(
 				"UPDATE WORLD_CITY WC SET WC.NAME =:name, WC.COUNTRY_CODE =:countryCode, WC.DISTRICT =:district, WC.POPULATION =:population WHERE WC.ID =:id")
-				.param(paramMap).update();
+				.params(paramMap).update();
 		return RestMsg.success(Messages.MSG010);
 	}
 }
