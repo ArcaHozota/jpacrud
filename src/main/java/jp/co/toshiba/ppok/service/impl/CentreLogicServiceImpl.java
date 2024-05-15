@@ -1,11 +1,16 @@
 package jp.co.toshiba.ppok.service.impl;
 
+import java.beans.PropertyDescriptor;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import jp.co.toshiba.ppok.dto.CityDto;
 import jp.co.toshiba.ppok.entity.City;
@@ -166,12 +171,32 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 			return Pagination.of(Lists.newArrayList(), 0, 1, PAGE_SIZE, NAVIGATION_PAGES);
 		}
 		final List<CityView> cityInfoRecords = this.jdbcClient
-				.sql("SELECT COUNT(1) FROM WORLD_CITY_VIEW WCV OFFSET ? ROWS FETCH NEXT ? ROWS ONLY")
+				.sql("SELECT WCV.* FROM WORLD_CITY_VIEW WCV OFFSET ? ROWS FETCH NEXT ? ROWS ONLY")
 				.params(offset, PAGE_SIZE).query(CityView.class).list();
 		final List<CityDto> pageInfos = cityInfoRecords.stream().map(item -> new CityDto(item.getId(), item.getName(),
 				item.getContinent(), item.getNation(), item.getDistrict(), item.getPopulation(), item.getLanguage()))
 				.toList();
 		return Pagination.of(pageInfos, totalRecords, pageNum, PAGE_SIZE, NAVIGATION_PAGES);
+	}
+
+	/**
+	 * エンティティのパラメータマップを取得する
+	 *
+	 * @param city 都市エンティティ
+	 * @return Map<String, Object>
+	 */
+	private Map<String, Object> getParamMap(final City city) {
+		final Map<String, Object> paramMap = Maps.newHashMap();
+		final BeanWrapper beanWrapper = new BeanWrapperImpl(city);
+		final PropertyDescriptor[] propertyDescriptors = beanWrapper.getPropertyDescriptors();
+		for (final PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+			final String propertyName = propertyDescriptor.getName();
+			if (StringUtils.isEqual("class", propertyName)) {
+				continue;
+			}
+			paramMap.put(propertyName, beanWrapper.getPropertyValue(propertyName));
+		}
+		return paramMap;
 	}
 
 	@Override
@@ -187,16 +212,17 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 				.single();
 		final String countryCode = this.jdbcClient
 				.sql("SELECT DISTINCT WCY.CODE FROM WORLD_COUNTRY WCY WHERE WCY.DELETE_FLG = ? AND WCY.NAME = ?")
-				.params(Messages.MSG008, cityDto.nation()).query(String.class).single();
+				.params(Messages.MSG007, cityDto.nation()).query(String.class).single();
 		final City city = new City();
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		city.setId(totalRecords + 1);
 		city.setCountryCode(countryCode);
 		city.setDeleteFlg(Messages.MSG007);
+		final Map<String, Object> paramMap = this.getParamMap(city);
 		this.jdbcClient.sql(
 				"INSERT INTO WORLD_CITY WC (WC.ID, WC.NAME, WC.COUNTRY_CODE, WC.DISTRICT, WC.POPULATION, WC.DELETE_FLG) "
 						+ "VALUES (:id, :name, :countryCode, :district, :population, :deleteFlg)")
-				.param(city).update();
+				.param(paramMap).update();
 		return RestMsg.success(Messages.MSG011);
 	}
 
@@ -212,12 +238,15 @@ public class CentreLogicServiceImpl implements CentreLogicService {
 		}
 		final String countryCode = this.jdbcClient
 				.sql("SELECT DISTINCT WCY.CODE FROM WORLD_COUNTRY WCY WHERE WCY.DELETE_FLG = ? AND WCY.NAME = ?")
-				.params(Messages.MSG008, cityDto.nation()).query(String.class).single();
+				.params(Messages.MSG007, cityDto.nation()).query(String.class).single();
 		final City city = new City();
 		SecondBeanUtils.copyNullableProperties(cityDto, city);
 		city.setCountryCode(countryCode);
 		city.setDeleteFlg(Messages.MSG007);
-		this.jdbcClient.sql("UPDATE WORLD_CITY WC SET WC = ? WHERE WC.ID = ?").params(city, city.getId()).update();
+		final Map<String, Object> paramMap = this.getParamMap(city);
+		this.jdbcClient.sql(
+				"UPDATE WORLD_CITY WC SET WC.NAME =:name, WC.COUNTRY_CODE =:countryCode, WC.DISTRICT =:district, WC.POPULATION =:population WHERE WC.ID =:id")
+				.param(paramMap).update();
 		return RestMsg.success(Messages.MSG010);
 	}
 }

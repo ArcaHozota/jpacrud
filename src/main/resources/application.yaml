@@ -13,4 +13,10 @@ spring:
       max-lifetime: 1500000
   output:
     ansi:
-      enabled: ALWAYS
+      enabled: ALWAYS    
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: DEBUG
